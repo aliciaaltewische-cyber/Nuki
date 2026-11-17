@@ -1,4 +1,11 @@
-# Brand Sheet – ENTWURF (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – ENTWURF v2 (noch nicht freigegeben)
+
+## 0. Wer
+- **Kanal:** @nuki.nooks (Instagram)
+- **Hauptfiguren:** Alicia und ihr Hund **Nuki**
+- **Sprache:** Deutsch
+- **Ton:** humorvoll, leicht verspielt – aber nicht albern. Trockene Pointen statt Klamauk,
+  gern aus Nukis Perspektive kommentiert (Caveat-Randnotiz).
 
 > Inspiriert von drei Referenzen (siehe `analyse-ref-1.md`, `analyse-ref-2-und-3.md`),
 > aber bewusst eigenständig: eigene Farben, eigene Schriften, eigene Wiedererkennungs-Elemente.
@@ -17,18 +24,17 @@ Collage statt Hochglanz.
 | Rolle | Name | Hex | Einsatz |
 |---|---|---|---|
 | **Primär** | Signalblau | `#045AFF` | Hauptfarbe: Flächen, Karten, Headlines auf Hell |
-| Hell | Off-White | `#FFF9F0` *(Hex noch bestätigen)* | Hintergründe, Captions, Sticker-Kontur |
-| Akzent | *offen – siehe Fragen* | | |
-| Randnotiz | Koralle | `#FF7A5C` *(Vorschlag)* | Caveat-Notizen, Herzen, Zahlen |
+| Hell | Off-White | `#FFF9F0` | Hintergründe, Captions, Sticker-Kontur |
+| Akzent | Koralle | `#FF7A5C` | Schlüsselwort in Captions, Caveat-Notizen, Herzen, Zahlen |
 
 Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro Bild.
 
 ## 4. Schriften
 | Rolle | Schrift | Stil |
 |---|---|---|
-| Headline / Großtext | **Gliker** | deine bestehende Headline-Schrift (Datei wird benötigt) |
+| Headline / Großtext | **Fredoka Bold** *(Vorschlag, Ersatz für Gliker – Alternativen: Lilita One, Bagel Fat One, Chewy)* | rund, fett, freundlich |
 | Randnotiz | **Caveat** Bold (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
-| Captions | *offen – siehe Fragen* | |
+| Captions | **Fredoka Bold** | gut lesbar, gleiche Familie wie Headline |
 
 ## 5. Captions
 - **Wort für Wort**, synchron zur Stimme (Whisper-Zeitstempel)
@@ -65,8 +71,5 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
-- Gliker-Schriftdatei (.otf/.ttf) hochladen
-- Hex-Code des Off-Whites
-- Dritte Farbe/Angabe nach „und mac…“ (Nachricht war abgeschnitten)
-- Schrift für Captions: Gliker, Instrument Serif oder eine schlichte Sans?
-- Name bzw. Kanal und Sprache der Videos
+- Headline-Schrift: A Fredoka, B Lilita One, C Bagel Fat One oder D Chewy?
+- Koralle als einzige Akzentfarbe okay?
