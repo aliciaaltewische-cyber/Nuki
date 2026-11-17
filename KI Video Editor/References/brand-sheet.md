@@ -1,4 +1,4 @@
-# Brand Sheet nuki.nooks – ENTWURF v6 (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – v6 ✅ freigegeben am 17.11.2026
 
 ## 0. Wer
 - **Kanal:** @nuki.nooks (Instagram)
@@ -74,6 +74,3 @@ Regeln:
 - Kein Text in den Instagram-Randzonen
 - Nicht mehr als drei Schriften pro Bild; Gochi Hand nur für Randnotizen, Poppins nie als Headline
 - Originale in `Raw Footage` nie verändern
-
-## Offene Fragen an dich
-- Gesamtfreigabe des Brand Sheets
