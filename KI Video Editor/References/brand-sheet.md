@@ -1,4 +1,4 @@
-# Brand Sheet nuki.nooks – ENTWURF v3 (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – ENTWURF v4 (noch nicht freigegeben)
 
 ## 0. Wer
 - **Kanal:** @nuki.nooks (Instagram)
@@ -33,6 +33,7 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 | Rolle | Schrift | Stil |
 |---|---|---|
 | Headline / Großtext | **Bricolage Grotesque** ExtraBold (Google Fonts) | klein oder normal geschrieben, enger Zeilen- und Buchstabenabstand |
+| Info-Text | **Poppins** SemiBold / Regular (Google Fonts) | Listen, Fakten, Zahlen, Preise, Datum, Labels („Tag 1 von 7“), nachgebaute Mockups |
 | Randnotiz | **Caveat** Bold (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
 | Captions | **Bricolage Grotesque** Bold | gut lesbar, gleiche Familie wie Headline |
 
@@ -67,7 +68,7 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 ## 9. No-Gos
 - Keine Inhalte, Figuren oder Grafiken der Referenz-Creator kopieren
 - Kein Text in den Instagram-Randzonen
-- Nicht mehr als zwei Schriften pro Bild
+- Nicht mehr als drei Schriften pro Bild; Caveat nur für Randnotizen, Poppins nie als Headline
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
