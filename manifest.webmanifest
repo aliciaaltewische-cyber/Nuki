@@ -1,9 +1,10 @@
 {
-  "name": "Nuki – Hundefreundliche Orte",
+  "name": "Nuki – Hundefreundliche Orte weltweit",
   "short_name": "Nuki",
+  "description": "Die Community-Karte für hundefreundliche Orte.",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#fff7ed",
-  "theme_color": "#c2410c",
-  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+  "background_color": "#ffffff",
+  "theme_color": "#ff5a36",
+  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
 }

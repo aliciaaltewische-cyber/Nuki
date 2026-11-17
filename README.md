@@ -1,62 +1,103 @@
-# 🐾 Nuki – Hundefreundliche Orte weltweit
+# 🐾 Nuki – Die Community für hundefreundliche Orte
 
-Eine Web-App (auch am Handy als App installierbar), in der alle hundefreundliche Orte auf einer Weltkarte
-entdecken und selbst ergänzen können: Cafés, Restaurants, Unterkünfte, Hundewiesen, Hundestrände,
-Wanderwege, Geschäfte, Tierärzte und mehr.
+Nuki ist eine Community-App, in der Hundemenschen weltweit hundefreundliche Orte teilen, bewerten und
+entdecken: Cafés, Restaurants, Unterkünfte, Hundewiesen, Hundestrände, Wanderwege, Geschäfte, Tierärzte
+und mehr. Unternehmen können ihren Ort gegen Bezahlung als **„Empfohlen“** hervorheben lassen.
 
 ## Funktionen
 
-- 🗺️ Weltkarte (OpenStreetMap) mit Markern je Kategorie
-- ➕ Orte hinzufügen: Adresse suchen, auf der Karte tippen, eigenen Standort nutzen
-  oder per Rechtsklick/langem Drücken direkt auf der Karte
-- 🦴 Ausstattung: Wassernapf, Leckerlis, drinnen erlaubt, leinenfrei, eingezäunt, Schatten, …
-- ⭐ Bewertung, Beschreibung, Website und Link zur Route
-- 🔎 Suche und Filter nach Kategorie, „In meiner Nähe“
-- ✏️ Eigene Einträge bearbeiten und löschen
-- 💾 Export/Import als JSON
+**Für Mitglieder**
+- Anmeldung per E-Mail-Link (ohne Passwort), eigenes Profil
+- Orte teilen mit Foto, Kategorie, Standort (Adresssuche, Karte oder GPS) und Ausstattung
+  (Wassernapf, Leckerlis, leinenfrei, Hunde-Menü …)
+- Orte mit Sternen und Text bewerten
+- Favoriten speichern
+- Punkte sammeln (10 pro Ort, 3 pro Bewertung) und in der Rangliste aufsteigen
+- Orte melden (Moderation)
 
-## Starten
+**Featured / Empfohlene Orte (Bezahlfunktion)**
+- Pakete: 1 Woche, 1 Monat, 3 Monate (Preise in der Datenbank anpassbar)
+- Bezahlung über Stripe Checkout (Karte, Apple Pay, Google Pay …)
+- Empfohlene Orte erscheinen im Karussell ganz oben, zuerst in der Liste, mit goldenem Marker und Badge
+- Laufzeit wird nach Zahlung automatisch verlängert
 
-Es braucht keinen Build-Schritt. Einfach einen beliebigen statischen Webserver im Ordner starten:
+**Oberfläche**
+- Modernes Design mit Karte und Liste nebeneinander (Desktop) bzw. Bottom-Navigation (Handy)
+- Dark Mode, installierbar als App (PWA), teilbare Links zu jedem Ort
+
+## Ausprobieren (Demo-Modus)
+
+Ohne Einrichtung läuft die App im **Demo-Modus**: Alles funktioniert (inkl. simulierter Zahlung), wird
+aber nur im eigenen Browser gespeichert.
 
 ```bash
 python3 -m http.server 8000
 # dann http://localhost:8000 öffnen
 ```
 
-Ohne weitere Einrichtung werden Orte **nur lokal in deinem Browser** gespeichert.
+## Live schalten
 
-## Weltweit teilen (gemeinsame Datenbank)
+### 1. Supabase (Datenbank, Login, Fotos)
 
-Damit alle Nutzer*innen dieselben Orte sehen, nutzt die App optional [Supabase](https://supabase.com)
-(kostenloser Tarif reicht):
+1. Kostenloses Projekt auf [supabase.com](https://supabase.com) anlegen.
+2. **SQL Editor** → Inhalt von [`supabase/schema.sql`](supabase/schema.sql) einfügen und ausführen.
+3. **Project Settings → API**: *Project URL* und *anon public* Key in [`config.js`](config.js) eintragen.
+4. **Authentication → URL Configuration**: die Adresse deiner Website als *Site URL* und *Redirect URL*
+   eintragen (z. B. `https://deinname.github.io/Nuki/`).
 
-1. Bei Supabase ein neues Projekt anlegen.
-2. Im Dashboard unter **SQL Editor** den Inhalt von [`supabase/schema.sql`](supabase/schema.sql) ausführen.
-3. Unter **Project Settings → API** die *Project URL* und den *anon public* Key kopieren
-   und in [`config.js`](config.js) eintragen.
+### 2. Stripe (Bezahlung für „Empfohlen“)
 
-Danach steht unten in der Seitenleiste „🌍 Gemeinsame Datenbank“. Alle können Orte hinzufügen;
-bearbeiten und löschen kann man nur die eigenen (erkannt über ein geheimes Token im Browser).
-Moderieren kannst du über das Supabase-Dashboard (Table Editor → `places`).
+1. Konto auf [stripe.com](https://stripe.com) anlegen, den **Secret Key** kopieren.
+2. [Supabase CLI](https://supabase.com/docs/guides/cli) installieren und die Funktionen deployen:
+   ```bash
+   supabase link --project-ref <dein-projekt>
+   supabase secrets set STRIPE_SECRET_KEY=sk_live_... SITE_URL=https://deinname.github.io/Nuki/
+   supabase functions deploy create-checkout
+   supabase functions deploy stripe-webhook --no-verify-jwt
+   ```
+3. In Stripe unter **Developers → Webhooks** einen Endpoint anlegen:
+   `https://<dein-projekt>.supabase.co/functions/v1/stripe-webhook`,
+   Events `checkout.session.completed` und `checkout.session.async_payment_succeeded`.
+4. Das Webhook-Signing-Secret hinterlegen:
+   `supabase secrets set STRIPE_WEBHOOK_SECRET=whsec_...`
 
-## Veröffentlichen
+Zum Testen zuerst die Test-Keys von Stripe (`sk_test_...`) verwenden.
+Preise und Pakete änderst du in der Tabelle `featured_plans`.
 
-Da die App aus statischen Dateien besteht, läuft sie kostenlos auf **GitHub Pages**
-(Repository → Settings → Pages → Branch auswählen), Netlify, Vercel o. Ä.
+### 3. Website veröffentlichen
+
+Die App besteht nur aus statischen Dateien, ein Build-Schritt ist nicht nötig. Sie läuft z. B. kostenlos auf
+**GitHub Pages** (Repository → Settings → Pages → Branch wählen), Netlify oder Vercel.
+
+## Moderation
+
+- Meldungen landen in der Tabelle `reports`.
+- Einen Ort ausblenden: in `places` die Spalte `hidden` auf `true` setzen.
+- Admin-Rechte (alle Orte/Bewertungen löschen dürfen): in `profiles` die Spalte `is_admin` auf `true` setzen.
+- Hervorhebung manuell vergeben: `featured_until` in `places` setzen.
+
+## Sicherheit
+
+- Row Level Security: Mitglieder können nur eigene Orte, Bewertungen und Favoriten ändern.
+- `featured_until` kann nur durch eine bezahlte Bestellung gesetzt werden (Stripe-Webhook mit geprüfter
+  Signatur). Preise kommen ausschließlich aus der Datenbank, nie vom Browser.
+- Fotos werden vor dem Upload verkleinert und in einen eigenen Ordner pro Mitglied gespeichert.
 
 ## Aufbau
 
-| Datei | Inhalt |
+| Pfad | Inhalt |
 |---|---|
-| `index.html` | Seitenstruktur und Formular |
-| `styles.css` | Design (inkl. Dark Mode und Handy-Layout) |
-| `app.js` | Karte, Liste, Filter, Formular |
-| `storage.js` | Speicherung lokal oder in Supabase |
-| `config.js` | Supabase-Zugangsdaten (optional) |
-| `supabase/schema.sql` | Datenbanktabelle und Zugriffsregeln |
-| `vendor/leaflet/` | Kartenbibliothek [Leaflet](https://leafletjs.com) 1.9.4 (BSD-2-Lizenz) |
+| `index.html`, `styles.css` | App-Gerüst und Design |
+| `js/app.js` | Steuerung: Routing, Aktionen, Formulare |
+| `js/views.js` | Ansichten: Entdecken, Ort, Community, Profil, Dialoge |
+| `js/map.js` | Karte und Marker (Leaflet) |
+| `js/backend/demo.js` | Demo-Backend (localStorage) |
+| `js/backend/supabase.js` | Echtes Backend (Supabase) |
+| `js/constants.js` | Kategorien, Ausstattung, Pakete |
+| `config.js` | Supabase-Zugangsdaten |
+| `supabase/schema.sql` | Datenbank, Rechte, Foto-Speicher |
+| `supabase/functions/` | Stripe-Checkout und -Webhook (Edge Functions) |
+| `vendor/` | Leaflet 1.9.4 (BSD-2), supabase-js 2.45.4 (MIT) |
 
-Kartendaten © OpenStreetMap-Mitwirkende. Adresssuche über Nominatim. Bitte deren
-[Nutzungsrichtlinien](https://operations.osmfoundation.org/policies/) beachten; für viel Verkehr
-einen eigenen Kachel- bzw. Geocoding-Anbieter verwenden.
+Kartendaten © OpenStreetMap-Mitwirkende, Kartenstil © CARTO, Adresssuche über Nominatim.
+Bei viel Verkehr bitte deren Nutzungsbedingungen beachten bzw. eigene Anbieter verwenden.

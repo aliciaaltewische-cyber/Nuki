@@ -3,87 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Nuki – Hundefreundliche Orte</title>
-  <meta name="description" content="Hundefreundliche Orte weltweit entdecken und ergänzen.">
-  <meta name="theme-color" content="#c2410c">
+  <title>Nuki – Hundefreundliche Orte weltweit</title>
+  <meta name="description" content="Die Community-Karte für hundefreundliche Orte: entdecken, teilen, bewerten.">
+  <meta name="theme-color" content="#ff5a36">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">🐾 <span>Nuki</span></div>
-    <input id="search" type="search" placeholder="Orte suchen …" aria-label="Orte suchen">
-    <button id="btn-add" class="primary">+ Ort hinzufügen</button>
-  </header>
-
-  <nav id="filters" class="filters" aria-label="Kategorien"></nav>
-
-  <main class="layout">
-    <section id="map" aria-label="Karte"></section>
-    <aside class="sidebar">
-      <div class="sidebar-head">
-        <strong id="count">0 Orte</strong>
-        <button id="btn-locate" class="ghost" title="Zu meinem Standort">📍 In meiner Nähe</button>
-      </div>
-      <ul id="list" class="list"></ul>
-      <footer class="sidebar-foot">
-        <span id="mode"></span>
-        <button id="btn-export" class="link">Export</button>
-        <label class="link">Import<input id="file-import" type="file" accept="application/json" hidden></label>
-      </footer>
-    </aside>
-  </main>
-
-  <dialog id="dlg">
-    <form id="form" method="dialog">
-      <h2 id="dlg-title">Neuen Ort hinzufügen</h2>
-
-      <label>Name *<input name="name" required maxlength="120"></label>
-
-      <label>Kategorie *
-        <select name="category" required></select>
+  <div id="app" class="app" data-view="discover">
+    <header class="topbar">
+      <a href="#/" id="logo" class="logo" aria-label="Nuki – Startseite"><span>Nuki</span></a>
+      <label class="searchbox">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="search" type="search" placeholder="Cafés, Strände, Parks suchen …" aria-label="Orte suchen" autocomplete="off">
       </label>
+      <nav class="topnav" aria-label="Hauptnavigation">
+        <a href="#/" data-nav="discover">Entdecken</a>
+        <a href="#/community" data-nav="community">Community</a>
+      </nav>
+      <button class="btn btn-primary add-btn" data-action="add">
+        <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        <span>Ort teilen</span>
+      </button>
+      <a href="#/profile" id="me-btn" class="me-btn" data-nav="profile"></a>
+    </header>
 
-      <label>Adresse
-        <div class="row">
-          <input name="address" maxlength="200" placeholder="Straße, Stadt, Land">
-          <button type="button" id="btn-geocode" class="ghost">Suchen</button>
+    <div id="demo-banner" class="demo-banner" hidden>
+      Demo-Modus · Daten werden nur in diesem Browser gespeichert
+    </div>
+
+    <main class="main">
+      <section id="panel" class="panel" aria-live="polite"></section>
+      <section class="mapwrap" aria-label="Karte">
+        <div id="map"></div>
+        <button class="map-fab" data-action="locate" aria-label="Zu meinem Standort">
+          <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/></svg>
+        </button>
+        <div class="pick-banner">
+          <span>📍 Tippe auf die Karte, um den Ort zu setzen</span>
+          <button class="btn btn-sm" data-action="cancel-pick">Abbrechen</button>
         </div>
-      </label>
-      <div class="row">
-        <button type="button" id="btn-pick" class="ghost">📍 Auf Karte wählen</button>
-        <button type="button" id="btn-here" class="ghost">🎯 Mein Standort</button>
-      </div>
-      <p class="hint" id="pos-hint">Noch keine Position – Adresse suchen oder auf der Karte wählen.</p>
-      <input type="hidden" name="lat"><input type="hidden" name="lng">
+      </section>
+    </main>
 
-      <fieldset>
-        <legend>Was gibt es für Hunde?</legend>
-        <div id="amenities" class="chips"></div>
-      </fieldset>
+    <nav class="bottomnav" aria-label="Navigation">
+      <a href="#/" data-nav="discover"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>Entdecken</a>
+      <a href="#/map" data-nav="map"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><path d="M9 3v15"/><path d="M15 6v15"/></svg>Karte</a>
+      <button class="bn-add" data-action="add" aria-label="Ort teilen"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg></button>
+      <a href="#/community" data-nav="community"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Community</a>
+      <a href="#/profile" data-nav="profile"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profil</a>
+    </nav>
+  </div>
 
-      <label>Bewertung
-        <div class="stars" id="stars"></div>
-      </label>
-      <input type="hidden" name="rating" value="0">
-
-      <label>Beschreibung<textarea name="description" rows="3" maxlength="1000" placeholder="Was macht den Ort hundefreundlich?"></textarea></label>
-      <label>Website<input name="website" type="url" maxlength="300" placeholder="https://…"></label>
-
-      <div class="actions">
-        <button type="button" id="btn-delete" class="danger" hidden>Löschen</button>
-        <span class="spacer"></span>
-        <button type="button" id="btn-cancel" class="ghost">Abbrechen</button>
-        <button type="submit" class="primary">Speichern</button>
-      </div>
-    </form>
-  </dialog>
-
+  <dialog id="modal" class="modal"></dialog>
   <div id="toast" role="status" aria-live="polite"></div>
 
   <script src="vendor/leaflet/leaflet.js"></script>
-  <script type="module" src="app.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>
