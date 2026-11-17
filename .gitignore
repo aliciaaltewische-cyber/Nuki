@@ -9,3 +9,8 @@ KI Video Editor/**/*.mp3
 KI Video Editor/**/*.m4a
 video-projekte/**/*.mp4
 video-projekte/**/*.mov
+# Screenshots/Fotos in Raw Footage enthalten private Daten (z. B. Lieferadresse) – nie committen
+KI Video Editor/Raw Footage/**/*.png
+KI Video Editor/Raw Footage/**/*.jpg
+KI Video Editor/Raw Footage/**/*.jpeg
+KI Video Editor/Raw Footage/**/*.heic
