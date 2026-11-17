@@ -7,3 +7,5 @@ KI Video Editor/**/*.mkv
 KI Video Editor/**/*.wav
 KI Video Editor/**/*.mp3
 KI Video Editor/**/*.m4a
+video-projekte/**/*.mp4
+video-projekte/**/*.mov

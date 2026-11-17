@@ -54,6 +54,10 @@ Hinweise:
   Mehr Stimmen-Vielfalt: Tonhöhe ändern mit `asetrate=SR*1.33,aresample=SR,atempo=1/1.33`.
   Herunterladen von `huggingface.co/rhasspy/piper-voices/resolve/main/de/de_DE/<name>/<qualität>/…`.
 
+- **Schriften in Remotion lokal laden** (`src/brandFonts.ts`, Dateien in `public/fonts`):
+  Der Render-Browser vertraut dem Proxy-Zertifikat nicht, `@remotion/google-fonts` hängt sonst.
+- Projekt-Quellcode jedes Videos liegt in `video-projekte/` im Repo (siehe README dort).
+
 ## GitHub
 - Arbeitszweig für den Video-Editor: **`video-editor`**. Der Standardzweig des Projekts ist eine
   andere App (hundefreundliche Orte) – dort nichts vom Video-Editor ablegen.
