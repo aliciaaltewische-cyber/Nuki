@@ -16,26 +16,24 @@ Collage statt Hochglanz.
 ## 3. Farben
 | Rolle | Name | Hex | Einsatz |
 |---|---|---|---|
-| Hauptfläche | Gletscherblau | `#A8D2FA` | Hintergründe, Text-Karten, Mockup-Flächen |
-| Kontrast | Nachtblau | `#16206B` | Text auf hellen Flächen, Konturen |
-| Signal-Akzent | Limette | `#D7F23A` | **nur** das eine Schlüsselwort pro Satz, Kritzel |
-| Warmer Akzent | Koralle | `#FF7A5C` | Sticker, Herzen, Zahlen und Ergebnisse |
-| Hell | Milchweiß | `#FFF9F0` | Captions, Sticker-Kontur, ruhige Karten |
+| **Primär** | Signalblau | `#045AFF` | Hauptfarbe: Flächen, Karten, Headlines auf Hell |
+| Hell | Off-White | `#FFF9F0` *(Hex noch bestätigen)* | Hintergründe, Captions, Sticker-Kontur |
+| Akzent | *offen – siehe Fragen* | | |
+| Randnotiz | Koralle | `#FF7A5C` *(Vorschlag)* | Caveat-Notizen, Herzen, Zahlen |
 
-Regel: höchstens **eine** Akzentfarbe pro Bild.
+Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro Bild.
 
-## 4. Schriften (alle kostenlos über Google Fonts)
+## 4. Schriften
 | Rolle | Schrift | Stil |
 |---|---|---|
-| Headline / Großtext | **Bricolage Grotesque** ExtraBold | klein geschrieben, enger Zeilenabstand |
-| Kontrast-Wort | **Instrument Serif** Italic | einzelne Wörter, die „gefühlt“ werden |
-| Handschrift (sparsam) | **Caveat** Bold | Randnotizen, Pfeile, „lol“-Kommentare |
-| Captions | Bricolage Grotesque Bold | siehe unten |
+| Headline / Großtext | **Gliker** | deine bestehende Headline-Schrift (Datei wird benötigt) |
+| Randnotiz | **Caveat** Bold (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
+| Captions | *offen – siehe Fragen* | |
 
 ## 5. Captions
 - **Wort für Wort**, synchron zur Stimme (Whisper-Zeitstempel)
-- Milchweiß mit weichem Nachtblau-Schatten, 64 px, mittig auf Brusthöhe
-- Schlüsselwort: Limette + kurzer Pop (Skalierung 100 → 115 → 100 % in 6 Frames)
+- Off-White mit weichem Signalblau-Schatten, 64 px, mittig auf Brusthöhe
+- Schlüsselwort: Akzentfarbe + kurzer Pop (Skalierung 100 → 115 → 100 % in 6 Frames)
 - Pro Satz höchstens **ein** großes Wort als Headline (Großtext), oft **hinter** mir
 
 ## 6. Schnitt & Tempo
@@ -47,10 +45,10 @@ Regel: höchstens **eine** Akzentfarbe pro Bild.
 - Ende: eigene Abschlusskarte (kein Programm-Logo)
 
 ## 7. Motion Graphics – meine Wiedererkennungs-Elemente
-1. **Sticker-Ich:** Freisteller von mir mit dicker Milchweiß-Kontur (12 px), der ins Bild „ploppt“
-2. **Limetten-Kritzel:** handgezeichneter Kreis oder Unterstreichung unter dem Schlüsselwort
+1. **Sticker-Ich:** Freisteller von mir mit dicker Off-White-Kontur (12 px), der ins Bild „ploppt“
+2. **Caveat-Kritzel:** handgezeichneter Kreis oder Unterstreichung unter dem Schlüsselwort
 3. **Text hinter mir:** Großtext auf Ebene zwischen Hintergrund und Person
-4. **Gletscherblaue Karten:** Kapitel- und Fakten-Karten mit abgerundeten Ecken (48 px)
+4. **Signalblaue Karten:** Kapitel- und Fakten-Karten mit abgerundeten Ecken (48 px)
 5. **Mini-Mockups:** Profil, Kommentar oder Kalender – im **eigenen** Farbschema nachgebaut
 6. Übergänge: Wischen mit Bewegungsunschärfe oder Sticker-Pop, keine Standard-Überblendungen
 
@@ -67,6 +65,8 @@ Regel: höchstens **eine** Akzentfarbe pro Bild.
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
-- Wie heißt du bzw. dein Kanal (für Abschlusskarte und Intro)?
-- Sprache deiner Videos: Deutsch, Englisch oder gemischt?
-- Passt die Farbwelt, oder lieber wärmer bzw. mehr Rosa?
+- Gliker-Schriftdatei (.otf/.ttf) hochladen
+- Hex-Code des Off-Whites
+- Dritte Farbe/Angabe nach „und mac…“ (Nachricht war abgeschnitten)
+- Schrift für Captions: Gliker, Instrument Serif oder eine schlichte Sans?
+- Name bzw. Kanal und Sprache der Videos
