@@ -1,0 +1,9 @@
+{
+  "name": "Nuki – Hundefreundliche Orte",
+  "short_name": "Nuki",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff7ed",
+  "theme_color": "#c2410c",
+  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

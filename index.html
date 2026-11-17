@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Nuki – Hundefreundliche Orte</title>
+  <meta name="description" content="Hundefreundliche Orte weltweit entdecken und ergänzen.">
+  <meta name="theme-color" content="#c2410c">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🐾 <span>Nuki</span></div>
+    <input id="search" type="search" placeholder="Orte suchen …" aria-label="Orte suchen">
+    <button id="btn-add" class="primary">+ Ort hinzufügen</button>
+  </header>
+
+  <nav id="filters" class="filters" aria-label="Kategorien"></nav>
+
+  <main class="layout">
+    <section id="map" aria-label="Karte"></section>
+    <aside class="sidebar">
+      <div class="sidebar-head">
+        <strong id="count">0 Orte</strong>
+        <button id="btn-locate" class="ghost" title="Zu meinem Standort">📍 In meiner Nähe</button>
+      </div>
+      <ul id="list" class="list"></ul>
+      <footer class="sidebar-foot">
+        <span id="mode"></span>
+        <button id="btn-export" class="link">Export</button>
+        <label class="link">Import<input id="file-import" type="file" accept="application/json" hidden></label>
+      </footer>
+    </aside>
+  </main>
+
+  <dialog id="dlg">
+    <form id="form" method="dialog">
+      <h2 id="dlg-title">Neuen Ort hinzufügen</h2>
+
+      <label>Name *<input name="name" required maxlength="120"></label>
+
+      <label>Kategorie *
+        <select name="category" required></select>
+      </label>
+
+      <label>Adresse
+        <div class="row">
+          <input name="address" maxlength="200" placeholder="Straße, Stadt, Land">
+          <button type="button" id="btn-geocode" class="ghost">Suchen</button>
+        </div>
+      </label>
+      <div class="row">
+        <button type="button" id="btn-pick" class="ghost">📍 Auf Karte wählen</button>
+        <button type="button" id="btn-here" class="ghost">🎯 Mein Standort</button>
+      </div>
+      <p class="hint" id="pos-hint">Noch keine Position – Adresse suchen oder auf der Karte wählen.</p>
+      <input type="hidden" name="lat"><input type="hidden" name="lng">
+
+      <fieldset>
+        <legend>Was gibt es für Hunde?</legend>
+        <div id="amenities" class="chips"></div>
+      </fieldset>
+
+      <label>Bewertung
+        <div class="stars" id="stars"></div>
+      </label>
+      <input type="hidden" name="rating" value="0">
+
+      <label>Beschreibung<textarea name="description" rows="3" maxlength="1000" placeholder="Was macht den Ort hundefreundlich?"></textarea></label>
+      <label>Website<input name="website" type="url" maxlength="300" placeholder="https://…"></label>
+
+      <div class="actions">
+        <button type="button" id="btn-delete" class="danger" hidden>Löschen</button>
+        <span class="spacer"></span>
+        <button type="button" id="btn-cancel" class="ghost">Abbrechen</button>
+        <button type="submit" class="primary">Speichern</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
