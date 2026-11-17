@@ -67,7 +67,7 @@ const CAPS: { from: number; to: number; words: W[] }[] = [
 
 // Leise Passanten-Stimmen + Soundeffekte (Sekunden im fertigen Video)
 const VOICES: [string, number][] = [
-  ["q1", 0.5], ["q2", 4.2], ["q3", 5.9], ["q4", 8.05], ["q5", 10.0], ["q6", 11.3],
+  ["q2", 4.2], ["q3", 5.9], ["q4", 8.05], ["q5", 10.0], ["q6", 11.3],
 ];
 const SFX: [string, number][] = [
   ["pop", 0.3], ["pop", 1.2], ["swoosh", 2.38],
