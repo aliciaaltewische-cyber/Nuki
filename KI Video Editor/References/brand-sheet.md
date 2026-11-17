@@ -1,4 +1,4 @@
-# Brand Sheet nuki.nooks – ENTWURF v2 (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – ENTWURF v3 (noch nicht freigegeben)
 
 ## 0. Wer
 - **Kanal:** @nuki.nooks (Instagram)
@@ -32,9 +32,9 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 ## 4. Schriften
 | Rolle | Schrift | Stil |
 |---|---|---|
-| Headline / Großtext | **Fredoka Bold** *(Vorschlag, Ersatz für Gliker – Alternativen: Lilita One, Bagel Fat One, Chewy)* | rund, fett, freundlich |
+| Headline / Großtext | **Bricolage Grotesque** ExtraBold (Google Fonts) | klein oder normal geschrieben, enger Zeilen- und Buchstabenabstand |
 | Randnotiz | **Caveat** Bold (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
-| Captions | **Fredoka Bold** | gut lesbar, gleiche Familie wie Headline |
+| Captions | **Bricolage Grotesque** Bold | gut lesbar, gleiche Familie wie Headline |
 
 ## 5. Captions
 - **Wort für Wort**, synchron zur Stimme (Whisper-Zeitstempel)
@@ -71,5 +71,4 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
-- Headline-Schrift: A Fredoka, B Lilita One, C Bagel Fat One oder D Chewy?
 - Koralle als einzige Akzentfarbe okay?
