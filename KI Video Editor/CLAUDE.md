@@ -9,7 +9,9 @@ Deutsch, was du machst, und frag nach, statt zu raten.
   Ich arbeite vom **iPad** aus. Es gibt keinen Mac, kein Homebrew und keinen `say`-Befehl.
 - Der Server wird nach jeder Sitzung zurückgesetzt. Dauerhaft bleibt nur, was im
   GitHub-Projekt `Nuki` committet und gepusht ist.
-- Das Einrichtungs-Skript der Umgebung installiert die Tools bei jedem Sitzungsstart neu.
+- Das Einrichtungs-Skript der Umgebung installiert die Tools bei jedem Sitzungsstart neu
+  (inkl. Piper-Stimmen, `@remotion/fonts` und Kopie von `video-projekte/` ins video-studio).
+  Protokoll: `~/.ki-video-editor/setup.log`.
   Fehlt trotzdem etwas, richte es nach dem Abschnitt „Tools“ neu ein und sag mir Bescheid.
 
 ## Ordner (im Projekt `Nuki`)
