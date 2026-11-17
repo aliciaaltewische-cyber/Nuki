@@ -1,0 +1,9 @@
+# Videos und Audio sind zu groß für GitHub – sie bleiben nur in der Sitzung
+KI Video Editor/**/*.mp4
+KI Video Editor/**/*.mov
+KI Video Editor/**/*.m4v
+KI Video Editor/**/*.webm
+KI Video Editor/**/*.mkv
+KI Video Editor/**/*.wav
+KI Video Editor/**/*.mp3
+KI Video Editor/**/*.m4a
