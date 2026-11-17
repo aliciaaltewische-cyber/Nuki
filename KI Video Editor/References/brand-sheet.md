@@ -1,11 +1,11 @@
-# Brand Sheet nuki.nooks – ENTWURF v4 (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – ENTWURF v5 (noch nicht freigegeben)
 
 ## 0. Wer
 - **Kanal:** @nuki.nooks (Instagram)
 - **Hauptfiguren:** Alicia und ihr Hund **Nuki**
 - **Sprache:** Deutsch
 - **Ton:** humorvoll, leicht verspielt – aber nicht albern. Trockene Pointen statt Klamauk,
-  gern aus Nukis Perspektive kommentiert (Caveat-Randnotiz).
+  gern aus Nukis Perspektive kommentiert (Gochi Hand-Randnotiz).
 
 > Inspiriert von drei Referenzen (siehe `analyse-ref-1.md`, `analyse-ref-2-und-3.md`),
 > aber bewusst eigenständig: eigene Farben, eigene Schriften, eigene Wiedererkennungs-Elemente.
@@ -25,7 +25,7 @@ Collage statt Hochglanz.
 |---|---|---|---|
 | **Primär** | Signalblau | `#045AFF` | Hauptfarbe: Flächen, Karten, Headlines auf Hell |
 | Hell | Off-White | `#FFF9F0` | Hintergründe, Captions, Sticker-Kontur |
-| Akzent | Koralle | `#FF7A5C` | Schlüsselwort in Captions, Caveat-Notizen, Herzen, Zahlen |
+| Akzent | Koralle | `#FF7A5C` | Schlüsselwort in Captions, Gochi Hand-Notizen, Herzen, Zahlen |
 
 Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro Bild.
 
@@ -34,7 +34,7 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 |---|---|---|
 | Headline / Großtext | **Bricolage Grotesque** ExtraBold (Google Fonts) | klein oder normal geschrieben, enger Zeilen- und Buchstabenabstand |
 | Info-Text | **Poppins** SemiBold / Regular (Google Fonts) | Listen, Fakten, Zahlen, Preise, Datum, Labels („Tag 1 von 7“), nachgebaute Mockups |
-| Randnotiz | **Caveat** Bold (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
+| Randnotiz | **Gochi Hand** (Google Fonts) | Randnotizen, Pfeile, Kommentare – sparsam |
 | Captions | **Bricolage Grotesque** Bold | gut lesbar, gleiche Familie wie Headline |
 
 ## 5. Captions
@@ -53,7 +53,7 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 
 ## 7. Motion Graphics – meine Wiedererkennungs-Elemente
 1. **Sticker-Ich:** Freisteller von mir mit dicker Off-White-Kontur (12 px), der ins Bild „ploppt“
-2. **Caveat-Kritzel:** handgezeichneter Kreis oder Unterstreichung unter dem Schlüsselwort
+2. **Gochi Hand-Kritzel:** handgezeichneter Kreis oder Unterstreichung unter dem Schlüsselwort
 3. **Text hinter mir:** Großtext auf Ebene zwischen Hintergrund und Person
 4. **Signalblaue Karten:** Kapitel- und Fakten-Karten mit abgerundeten Ecken (48 px)
 5. **Mini-Mockups:** Profil, Kommentar oder Kalender – im **eigenen** Farbschema nachgebaut
@@ -68,7 +68,7 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 ## 9. No-Gos
 - Keine Inhalte, Figuren oder Grafiken der Referenz-Creator kopieren
 - Kein Text in den Instagram-Randzonen
-- Nicht mehr als drei Schriften pro Bild; Caveat nur für Randnotizen, Poppins nie als Headline
+- Nicht mehr als drei Schriften pro Bild; Gochi Hand nur für Randnotizen, Poppins nie als Headline
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
