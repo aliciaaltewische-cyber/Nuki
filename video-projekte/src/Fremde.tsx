@@ -77,12 +77,13 @@ const BUBBLES: Bubble[] = [
 type W = { t: number; w: string; key?: boolean };
 const p4b = at("p4b");
 const CAPS: { from: number; to: number; words: W[]; box?: boolean }[] = [
-  { from: p4b, to: at("p3a"), box: true, words: [{ t: p4b + 0.08, w: "Ja," }, { t: p4b + 0.3, w: "der" }, { t: p4b + 0.45, w: "hoppst" }, { t: p4b + 0.75, w: "wirklich", key: true }, { t: p4b + 1.0, w: "lustig." }] },
+  { from: p4b, to: at("p3a"), words: [{ t: p4b + 0.08, w: "Ja," }, { t: p4b + 0.3, w: "der" }, { t: p4b + 0.45, w: "hoppst" }, { t: p4b + 0.75, w: "wirklich", key: true }, { t: p4b + 1.0, w: "lustig." }] },
   { from: at("p2c"), to: at("break"), words: [{ t: at("p2c") + 0.08, w: "Nee.", key: true }] },
   { from: at("p1c"), to: END_FROM / FPS, words: [{ t: at("p1c") + 0.1, w: "Ja." }] },
 ];
 const WUFFS = [at("p2a") + 0.1, at("p2a") + 1.1];
-const NOTE_FROM = at("p1b") + 1.1;
+const NOTE_FROM = at("p2b") + 0.5;
+const NOTE_TO = at("break");
 
 const SFX: [string, number][] = [
   ["swoosh", at("p4a") - 0.05],
@@ -186,7 +187,7 @@ const NukiNote: React.FC = () => {
   const frame = useCurrentFrame();
   const t = frame / FPS;
   const s = usePop(NOTE_FROM, 10);
-  if (t < NOTE_FROM || t >= END_FROM / FPS) return null;
+  if (t < NOTE_FROM || t >= NOTE_TO) return null;
   return (
     <div style={{ position: "absolute", top: 300, left: 330, right: 50, background: BLAU, borderRadius: 30, padding: "14px 30px 18px", fontFamily: GOCHI, fontSize: 70, lineHeight: 1.05, color: ROSA, transform: `rotate(-4deg) scale(${s})`, transformOrigin: "left center", boxShadow: "0 10px 30px rgba(0,24,77,0.3)" }}>
       Nuki: ich bin ein gefährlicher Eisbär!
@@ -216,7 +217,7 @@ const Hook: React.FC = () => {
       </div>
       {frame >= f(0.7) && (
         <div style={{ position: "absolute", top: 870, right: 70, background: BLAU, borderRadius: 28, padding: "8px 30px 14px", fontFamily: GOCHI, fontSize: 72, color: ROSA, transform: `rotate(-5deg) scale(${note})`, boxShadow: "0 10px 30px rgba(0,24,77,0.3)" }}>
-          Platz 1 tut weh ↓
+          Platz 1 kennen wir alle
         </div>
       )}
     </>
