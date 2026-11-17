@@ -35,6 +35,7 @@ Arbeitsdateien liegen im versteckten Ordner `~/.ki-video-editor` (= `/root/.ki-v
 | Whisper (whisper.cpp) | `~/.ki-video-editor/whisper.cpp/build/bin/whisper-cli` | `whisper-cli -m ~/.ki-video-editor/whisper-models/ggml-large-v3-turbo-q5_0.bin -l de -f <datei-16khz.wav>` |
 | yt-dlp | `~/.ki-video-editor/venv/bin/yt-dlp` | `~/.ki-video-editor/venv/bin/yt-dlp -P "KI Video Editor/References" <link>` |
 | Sprachausgabe (Tests) | `espeak-ng` | `espeak-ng -v de -w test.wav "Text"` |
+| Stimmen (Piper TTS) | `~/.ki-video-editor/venv/bin/piper`, Stimmen in `~/.ki-video-editor/piper-voices` | `echo "Text" \| piper -m <stimme>.onnx -f out.wav` |
 
 Hinweise:
 - Whisper braucht 16-kHz-Mono-WAV: `ffmpeg -i in.mp4 -ar 16000 -ac 1 -c:a pcm_s16le out.wav`.
@@ -46,6 +47,17 @@ Hinweise:
 - Freigegebene Internet-Adressen: huggingface.co, us.aws.cdn.hf.co, cas-bridge.xethub.hf.co,
   www.instagram.com, i.instagram.com (plus npm/PyPI/GitHub). Instagram blockt Server oft.
   Dann bitte ich dich, das Video selbst hochzuladen. Browser-Cookies nur mit meiner Zustimmung.
+
+- Piper-Stimmen (deutsch), die gut klingen: thorsten-high, thorsten-medium, thorsten_emotional-medium
+  (Sprecher 0 amused, 6 surprised), eva_k-x_low, kerstin-low (nur bei manchen Sätzen).
+  Unbrauchbar: mls, ramona, karlsson. **Jede erzeugte Zeile mit Whisper gegenprüfen** (z. B. „Eisbär“ wird oft „Eisberg“).
+  Mehr Stimmen-Vielfalt: Tonhöhe ändern mit `asetrate=SR*1.33,aresample=SR,atempo=1/1.33`.
+  Herunterladen von `huggingface.co/rhasspy/piper-voices/resolve/main/de/de_DE/<name>/<qualität>/…`.
+
+## GitHub
+- Arbeitszweig für den Video-Editor: **`video-editor`**. Der Standardzweig des Projekts ist eine
+  andere App (hundefreundliche Orte) – dort nichts vom Video-Editor ablegen.
+- Storyboards (Bilder) gehören nicht in „KI Video Editor“, sondern werden im Chat geschickt.
 
 ## Brand Sheet
 Mein Brand Sheet liegt in `KI Video Editor/References/brand-sheet.md`.
