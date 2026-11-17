@@ -1,4 +1,4 @@
-# Brand Sheet nuki.nooks – ENTWURF v5 (noch nicht freigegeben)
+# Brand Sheet nuki.nooks – ENTWURF v6 (noch nicht freigegeben)
 
 ## 0. Wer
 - **Kanal:** @nuki.nooks (Instagram)
@@ -25,9 +25,13 @@ Collage statt Hochglanz.
 |---|---|---|---|
 | **Primär** | Signalblau | `#045AFF` | Hauptfarbe: Flächen, Karten, Headlines auf Hell |
 | Hell | Off-White | `#FFF9F0` | Hintergründe, Captions, Sticker-Kontur |
-| Akzent | Koralle | `#FF7A5C` | Schlüsselwort in Captions, Gochi Hand-Notizen, Herzen, Zahlen |
+| Akzent | Zuckerwatte | `#FFB8D9` | Schlüsselwort in Captions, Gochi Hand-Notizen, Herzen, Zahlen |
 
-Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro Bild.
+Regeln:
+- Signalblau trägt das Bild, Zuckerwatte ist der einzige Akzent.
+- **Auf Blau oder auf dem Video** (mit Schatten): Zuckerwatte als Schriftfarbe (Lesbarkeit 3,4 : 1).
+- **Auf Off-White/hellen Flächen:** Zuckerwatte **nie** als Schriftfarbe (1,5 : 1), sondern als
+  Textmarker-Balken hinter Signalblau-Schrift. Randnotizen dort in Signalblau.
 
 ## 4. Schriften
 | Rolle | Schrift | Stil |
@@ -72,4 +76,4 @@ Regel: Signalblau trägt das Bild, höchstens **eine** weitere Akzentfarbe pro B
 - Originale in `Raw Footage` nie verändern
 
 ## Offene Fragen an dich
-- Koralle als einzige Akzentfarbe okay?
+- Gesamtfreigabe des Brand Sheets
