@@ -219,7 +219,9 @@ export const Brush: React.FC = () => {
       <Sequence durationInFrames={f(INTRO)}>
         <Intro />
       </Sequence>
-      <Audio src={staticFile("brush/intro-brush.wav")} volume={0.55} />
+      <Sequence durationInFrames={f(INTRO + 0.15)}>
+        <Audio src={staticFile("brush/sitcom-intro.wav")} volume={0.6} />
+      </Sequence>
       {LAYOUT.map((s, i) => (
         <Sequence key={s.name} from={s.from} durationInFrames={s.dur}>
           <Footage s={s} first={i === 0} last={i === LAYOUT.length - 1} />
