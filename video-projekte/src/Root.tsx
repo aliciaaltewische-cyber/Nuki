@@ -9,6 +9,7 @@ export const RemotionRoot: React.FC = () => {
   return (
     <>
       <MyComposition />
+      <Composition id="BrushHaus" component={Brush} defaultProps={{ intro: "haus" as const }} durationInFrames={BRUSH_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Brush" component={Brush} durationInFrames={BRUSH_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Geschenke" component={Geschenke} durationInFrames={GESCHENKE_DURATION} fps={30} width={1080} height={1920} />
       <Composition id="Fremde" component={Fremde} durationInFrames={FREMDE_DURATION} fps={30} width={1080} height={1920} />

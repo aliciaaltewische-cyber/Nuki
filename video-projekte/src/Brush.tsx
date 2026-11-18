@@ -272,7 +272,74 @@ export const Smoke: React.FC<{ dur: number }> = ({ dur }) => {
   );
 };
 
-export const Brush: React.FC = () => {
+// ---------- Alternative: Sitcom-Haus-Intro ----------
+const WIN = { x: 630, y: 860, w: 150, h: 230 };
+
+const HouseSamoyed: React.FC<{ t: number }> = ({ t }) => {
+  const p = interpolate(t, [3.2, 4.2], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  if (t < 3.2 || t > 4.2) return null;
+  const w = 140;
+  const h = (w * 431) / 900;
+  const x = -w + p * (WIN.w + w);
+  const g = t * 24;
+  const stretch = 1 + Math.sin(g) * 0.05;
+  return (
+    <div style={{ position: "absolute", left: WIN.x, top: WIN.y, width: WIN.w, height: WIN.h, overflow: "hidden" }}>
+      <Img
+        src={staticFile("brush/samoyed-top.png")}
+        style={{ position: "absolute", left: x, top: WIN.h * 0.6 - h / 2 + Math.sin(g * 0.5) * 2, width: w, height: h, opacity: 0.9, transform: `scaleX(${stretch}) scaleY(${2 - stretch})` }}
+      />
+    </div>
+  );
+};
+
+const IntroHaus: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = frame / fps;
+  const tv = interpolate(t, [2.3, 2.8], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const titleOut = interpolate(t, [2.3, 2.9], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const z = interpolate(t, [2.6, INTRO], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic) });
+  const scale = 1 + (1920 / WIN.h - 1) * z;
+  const cx = WIN.x + WIN.w / 2;
+  const cy = WIN.y + WIN.h / 2;
+  const dx = (540 - cx) * z;
+  const dy = (960 - cy) * z;
+  const lines: { w: string; size: number; pink?: boolean; ls: number }[] = [
+    { w: "BRUSH", size: 200, ls: -6 },
+    { w: "SAMOYED", size: 176, pink: true, ls: -5 },
+    { w: "with me", size: 150, ls: -3 },
+  ];
+  const ep = spring({ frame: frame - f(1.0), fps, config: { damping: 14 } });
+  const L = (src: string) => <Img src={staticFile(src)} style={{ position: "absolute", inset: 0, width: 1080, height: 1920 }} />;
+  return (
+    <AbsoluteFill style={{ background: "#06123d", overflow: "hidden" }}>
+      <AbsoluteFill style={{ transformOrigin: `${cx}px ${cy}px`, transform: `translate(${dx}px, ${dy}px) scale(${scale})` }}>
+        {L("brush/house-warm.svg")}
+        <div style={{ opacity: tv }}>
+          {L("brush/house-tv.svg")}
+          <HouseSamoyed t={t} />
+          {L("brush/bars.svg")}
+        </div>
+        {/* Titel liegt HINTER Laterne und Ast */}
+        <div style={{ position: "absolute", top: 520, left: 0, right: 0, textAlign: "center", fontFamily: BRICO, fontWeight: 800, color: OFF, lineHeight: 0.84, textShadow: "0 10px 40px rgba(0,0,0,.5)", opacity: titleOut }}>
+          {lines.map((l, i) => {
+            const s = spring({ frame: frame - 4 - i * 5, fps, config: { damping: 12, mass: 0.6 } });
+            return (
+              <div key={i} style={{ fontSize: l.size, letterSpacing: l.ls, color: l.pink ? ROSA : OFF, transform: `translateY(${(1 - s) * 50}px) scale(${0.85 + 0.15 * s})`, opacity: Math.min(1, s * 1.4) }}>
+                {l.pink ? (<><span style={{ fontSize: 150, letterSpacing: -3, color: OFF }}>my </span>{l.w}</>) : l.w}
+              </div>
+            );
+          })}
+          <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 46, letterSpacing: 10, marginTop: 40, opacity: 0.9 * ep }}>EPISODE 1</div>
+        </div>
+        {L("brush/fg.svg")}
+      </AbsoluteFill>
+    </AbsoluteFill>
+  );
+};
+
+export const Brush: React.FC<{ intro?: "muenchen" | "haus" }> = ({ intro = "muenchen" }) => {
   const wk = seg("willkommen");
   const fl = seg("fluff");
   const df = seg("detox-fast");
@@ -281,7 +348,7 @@ export const Brush: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: "#000" }}>
       <Sequence durationInFrames={f(INTRO)}>
-        <Intro />
+        {intro === "haus" ? <IntroHaus /> : <Intro />}
       </Sequence>
       <Sequence durationInFrames={f(INTRO + 0.15)}>
         <Audio src={staticFile("brush/sitcom-intro.wav")} volume={0.6} />
