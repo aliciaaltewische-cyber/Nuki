@@ -204,7 +204,6 @@ const EndCard: React.FC = () => {
   return (
     <AbsoluteFill style={{ background: BLAU, opacity: bg, color: OFF }}>
       <div style={{ position: "absolute", top: 560, left: 80, right: 80 }}>
-        <div style={{ display: "inline-block", fontFamily: POPPINS, fontWeight: 600, fontSize: 40, background: OFF, color: BLAU, borderRadius: 40, padding: "10px 32px", marginBottom: 36, opacity: a(4), transform: `scale(${a(4)})`, transformOrigin: "left center" }}>Episode 2 folgt</div>
         <div style={{ fontFamily: BRICO, fontWeight: 800, fontSize: 132, lineHeight: 0.98, letterSpacing: -4 }}>
           {words.map((w, i) => {
             const s = a(8 + i * 3);
