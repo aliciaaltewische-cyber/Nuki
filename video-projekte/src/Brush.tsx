@@ -167,7 +167,7 @@ const SpaCard: React.FC<{ term: string; sub?: string; dur: number; kicker?: stri
   return (
     <div style={{ position: "absolute", top: 260, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: inn * out }}>
       <div style={{ transform: `translateY(${(1 - inn) * -30}px)`, background: "rgba(255,249,240,0.94)", color: BLAU, borderRadius: 48, padding: "26px 64px 32px", textAlign: "center", boxShadow: "0 14px 40px rgba(0,24,77,0.28)", whiteSpace: "nowrap" }}>
-        <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, letterSpacing: 12, opacity: 0.75 }}>{kicker}</div>
+        {kicker && <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, letterSpacing: 12, opacity: 0.75 }}>{kicker}</div>}
         <div style={{ fontFamily: BRICO, fontWeight: 800, fontSize: 88, letterSpacing: -2, lineHeight: 1.05 }}>{term}</div>
         {sub && <div style={{ fontFamily: GOCHI, fontSize: 56, opacity: 0.85 }}>{sub}</div>}
       </div>
@@ -248,7 +248,7 @@ export const Brush: React.FC = () => {
         <SpaCard kicker="STEP 3" term="Leckerlis verteilen" dur={ri.dur - 20} />
       </Sequence>
       <Sequence from={wk.from + 10} durationInFrames={wk.dur - 20}>
-        <SpaCard term="Willkommen" sub="Heute: Fell-Treatment" dur={wk.dur - 20} />
+        <SpaCard kicker="" term="Heute: Nukis Spa-Tag" dur={wk.dur - 20} />
       </Sequence>
       <Sequence from={END_FROM} durationInFrames={f(END)}>
         <EndCard />
