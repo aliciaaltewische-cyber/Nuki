@@ -8,4 +8,4 @@
   dann RGBA-WebM (VP9 yuva420p) – im Remotion-Code in eigenes `<AbsoluteFill>` legen, sonst liegt Text davor
 - Erste Karte „Heute: Nukis Spa-Tag“ (statt Willkommen), Abspann „Folge uns für mehr Samojeden-Alltag“ + @nuki.nooks; Intro-Musik: eigene Synth-Melodie (sitcom-intro.wav, 160 BPM, C-Dur-Lauf → gehaltener F7)
 - Steps statt Wörtern: Step 1 Bürsten (raw 7–12,5), Step 2 Bauch bürsten (ab raw 17), Step 3 Leckerlis verteilen (raw 25,8–30,5)
-- Räucherstäbchen-Rauch: SVG-Rauchfäden (Komponente Smoke) von unten rechts, nur im Hauptteil
+- Räucherstäbchen-Rauch ausprobiert und auf Wunsch wieder entfernt (Komponente Smoke bleibt ungenutzt im Code)

@@ -304,9 +304,6 @@ export const Brush: React.FC = () => {
       <Sequence from={wk.from + 10} durationInFrames={wk.dur - 20}>
         <SpaCard kicker="" term="Heute: Nukis Spa-Tag" dur={wk.dur - 20} />
       </Sequence>
-      <Sequence from={wk.from} durationInFrames={END_FROM - wk.from + 10}>
-        <Smoke dur={END_FROM - wk.from + 10} />
-      </Sequence>
       <Sequence from={END_FROM} durationInFrames={f(END)}>
         <EndCard />
       </Sequence>
