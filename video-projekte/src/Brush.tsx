@@ -198,13 +198,23 @@ const EndCard: React.FC = () => {
   const { fps } = useVideoConfig();
   const bg = interpolate(frame, [0, 14], [0, 1], { extrapolateRight: "clamp" });
   const a = (d: number) => spring({ frame: frame - d, fps, config: { damping: 16 } });
+  const words: { w: string; pink?: boolean }[] = [
+    { w: "Folge" }, { w: "uns" }, { w: "für" }, { w: "mehr" }, { w: "Samojeden-", pink: true }, { w: "Alltag", pink: true },
+  ];
   return (
-    <AbsoluteFill style={{ background: BLAU, opacity: bg, color: OFF, alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-      <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 40, letterSpacing: 6, background: OFF, color: BLAU, borderRadius: 40, padding: "10px 32px", opacity: a(6) }}>Episode 2</div>
-      <div style={{ fontFamily: BRICO, fontWeight: 800, fontSize: 150, lineHeight: 0.95, letterSpacing: -4, marginTop: 36, opacity: a(10), transform: `translateY(${(1 - a(10)) * 30}px)` }}>
-        to be<br /><span style={{ color: ROSA }}>continued</span> …
+    <AbsoluteFill style={{ background: BLAU, opacity: bg, color: OFF }}>
+      <div style={{ position: "absolute", top: 560, left: 80, right: 80 }}>
+        <div style={{ display: "inline-block", fontFamily: POPPINS, fontWeight: 600, fontSize: 40, background: OFF, color: BLAU, borderRadius: 40, padding: "10px 32px", marginBottom: 36, opacity: a(4), transform: `scale(${a(4)})`, transformOrigin: "left center" }}>Episode 2 folgt</div>
+        <div style={{ fontFamily: BRICO, fontWeight: 800, fontSize: 132, lineHeight: 0.98, letterSpacing: -4 }}>
+          {words.map((w, i) => {
+            const s = a(8 + i * 3);
+            return (
+              <span key={i} style={{ display: "inline-block", marginRight: w.w.endsWith("-") ? 0 : 28, color: w.pink ? ROSA : OFF, opacity: s, transform: `translateY(${(1 - s) * 34}px)` }}>{w.w}</span>
+            );
+          })}
+        </div>
+        <div style={{ fontFamily: GOCHI, fontSize: 84, marginTop: 70, opacity: a(30), transform: `rotate(-3deg) scale(${a(30)})`, transformOrigin: "left center" }}>@nuki.nooks</div>
       </div>
-      <div style={{ fontFamily: GOCHI, fontSize: 76, marginTop: 120, opacity: a(30) }}>@nuki.nooks</div>
     </AbsoluteFill>
   );
 };
