@@ -219,7 +219,6 @@ const EndCard: React.FC = () => {
 };
 
 export const Brush: React.FC = () => {
-  const ri = seg("ritual");
   const wk = seg("willkommen");
   return (
     <AbsoluteFill style={{ background: "#000" }}>
