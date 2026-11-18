@@ -160,14 +160,14 @@ const Footage: React.FC<{ s: (typeof LAYOUT)[number]; first: boolean; last: bool
   );
 };
 
-const SpaCard: React.FC<{ term: string; sub?: string; dur: number }> = ({ term, sub, dur }) => {
+const SpaCard: React.FC<{ term: string; sub?: string; dur: number; kicker?: string }> = ({ term, sub, dur, kicker = "✦ NUKI SPA ✦" }) => {
   const frame = useCurrentFrame();
   const inn = interpolate(frame, [0, 18], [0, 1], { extrapolateRight: "clamp", easing: Easing.out(Easing.cubic) });
   const out = interpolate(frame, [dur - 14, dur], [1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   return (
     <div style={{ position: "absolute", top: 260, left: 0, right: 0, display: "flex", justifyContent: "center", opacity: inn * out }}>
       <div style={{ transform: `translateY(${(1 - inn) * -30}px)`, background: "rgba(255,249,240,0.94)", color: BLAU, borderRadius: 48, padding: "26px 64px 32px", textAlign: "center", boxShadow: "0 14px 40px rgba(0,24,77,0.28)", whiteSpace: "nowrap" }}>
-        <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, letterSpacing: 12, opacity: 0.75 }}>✦ NUKI SPA ✦</div>
+        <div style={{ fontFamily: POPPINS, fontWeight: 600, fontSize: 30, letterSpacing: 12, opacity: 0.75 }}>{kicker}</div>
         <div style={{ fontFamily: BRICO, fontWeight: 800, fontSize: 88, letterSpacing: -2, lineHeight: 1.05 }}>{term}</div>
         {sub && <div style={{ fontFamily: GOCHI, fontSize: 56, opacity: 0.85 }}>{sub}</div>}
       </div>
@@ -220,6 +220,10 @@ const EndCard: React.FC = () => {
 
 export const Brush: React.FC = () => {
   const wk = seg("willkommen");
+  const fl = seg("fluff");
+  const df = seg("detox-fast");
+  const dt = seg("detox");
+  const ri = seg("ritual");
   return (
     <AbsoluteFill style={{ background: "#000" }}>
       <Sequence durationInFrames={f(INTRO)}>
@@ -233,6 +237,16 @@ export const Brush: React.FC = () => {
           <Footage s={s} first={i === 0} last={i === LAYOUT.length - 1} />
         </Sequence>
       ))}
+      {/* Steps */}
+      <Sequence from={fl.from + 10} durationInFrames={fl.dur - 20}>
+        <SpaCard kicker="STEP 1" term="Bürsten" dur={fl.dur - 20} />
+      </Sequence>
+      <Sequence from={df.from + 30} durationInFrames={dt.from + dt.dur - df.from - 40}>
+        <SpaCard kicker="STEP 2" term="Bauch bürsten" dur={dt.from + dt.dur - df.from - 40} />
+      </Sequence>
+      <Sequence from={ri.from + 10} durationInFrames={ri.dur - 20}>
+        <SpaCard kicker="STEP 3" term="Leckerlis verteilen" dur={ri.dur - 20} />
+      </Sequence>
       <Sequence from={wk.from + 10} durationInFrames={wk.dur - 20}>
         <SpaCard term="Willkommen" sub="Heute: Fell-Treatment" dur={wk.dur - 20} />
       </Sequence>

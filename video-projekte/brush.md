@@ -7,3 +7,4 @@
 - (entfernt auf Wunsch) Text hinter Personen: FLUFF / SOFT / TREAT; Freisteller per rembg `birefnet-general-lite` (Masken 10–12 fps, ~50 s/Bild, NIE zwei gleichzeitig – Speicher!),
   dann RGBA-WebM (VP9 yuva420p) – im Remotion-Code in eigenes `<AbsoluteFill>` legen, sonst liegt Text davor
 - Nur Spa-Karte „Willkommen“, Abspann „Folge uns für mehr Samojeden-Alltag“ + @nuki.nooks; Intro-Musik: eigene Synth-Melodie (sitcom-intro.wav, 160 BPM, C-Dur-Lauf → gehaltener F7)
+- Steps statt Wörtern: Step 1 Bürsten (raw 7–12,5), Step 2 Bauch bürsten (ab raw 17), Step 3 Leckerlis verteilen (raw 25,8–30,5)
