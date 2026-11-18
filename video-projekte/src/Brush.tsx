@@ -218,6 +218,60 @@ const EndCard: React.FC = () => {
   );
 };
 
+// ---------- Räucherstäbchen-Rauch: dünne Rauchfäden aus der Ecke unten rechts ----------
+export const Smoke: React.FC<{ dur: number }> = ({ dur }) => {
+  const frame = useCurrentFrame();
+  const t = frame / FPS;
+  const fade = interpolate(frame, [0, 30, dur - 30, dur], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const X0 = 1000;
+  const Y0 = 1990;
+  const ribbons = [
+    { ph: 0, amp: 1, w: 7, op: 0.75 },
+    { ph: 2.1, amp: 1.3, w: 5, op: 0.55 },
+    { ph: 4.2, amp: 0.8, w: 9, op: 0.4 },
+  ];
+  const path = (ph: number, amp: number) => {
+    const pts: string[] = [];
+    for (let i = 0; i <= 60; i++) {
+      const k = i / 60; // 0 unten … 1 oben
+      const y = Y0 - k * 1250;
+      const rise = y + t * 140;
+      const x = X0 - k * 260 * amp + Math.sin(rise * 0.008 + ph + t * 0.6) * (10 + 120 * k * k) * amp + Math.sin(rise * 0.021 + ph * 1.7) * 18 * k;
+      pts.push(`${i === 0 ? "M" : "L"}${x.toFixed(1)} ${y.toFixed(1)}`);
+    }
+    return pts.join(" ");
+  };
+  return (
+    <AbsoluteFill style={{ opacity: fade, pointerEvents: "none" }}>
+      <svg width={1080} height={1920} viewBox="0 0 1080 1920" style={{ position: "absolute", inset: 0 }}>
+        <defs>
+          <linearGradient id="smokeFade" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stopColor="#fff" stopOpacity={0.9} />
+            <stop offset="0.55" stopColor="#fff" stopOpacity={0.45} />
+            <stop offset="1" stopColor="#fff" stopOpacity={0} />
+          </linearGradient>
+          <mask id="smokeMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1080" height="1920">
+            <rect x="0" y="700" width="1080" height="1300" fill="url(#smokeFade)" />
+          </mask>
+          <filter id="curl" x="-30%" y="-10%" width="160%" height="120%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves={2} seed={Math.floor(t * 3) % 50} result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale={38} />
+            <feGaussianBlur stdDeviation={5} />
+          </filter>
+        </defs>
+        <g mask="url(#smokeMask)" filter="url(#curl)" fill="none" strokeLinecap="round">
+          {ribbons.map((r, i) => (
+            <path key={i} d={path(r.ph, r.amp)} stroke="#ffffff" strokeWidth={r.w} strokeOpacity={r.op} />
+          ))}
+          {ribbons.map((r, i) => (
+            <path key={`w${i}`} d={path(r.ph + 0.4, r.amp * 1.1)} stroke="#ffffff" strokeWidth={r.w * 4} strokeOpacity={r.op * 0.18} />
+          ))}
+        </g>
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
 export const Brush: React.FC = () => {
   const wk = seg("willkommen");
   const fl = seg("fluff");
@@ -249,6 +303,9 @@ export const Brush: React.FC = () => {
       </Sequence>
       <Sequence from={wk.from + 10} durationInFrames={wk.dur - 20}>
         <SpaCard kicker="" term="Heute: Nukis Spa-Tag" dur={wk.dur - 20} />
+      </Sequence>
+      <Sequence from={wk.from} durationInFrames={END_FROM - wk.from + 10}>
+        <Smoke dur={END_FROM - wk.from + 10} />
       </Sequence>
       <Sequence from={END_FROM} durationInFrames={f(END)}>
         <EndCard />
