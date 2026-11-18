@@ -175,7 +175,7 @@ const SpaCard: React.FC<{ term: string; sub?: string; dur: number }> = ({ term, 
   );
 };
 
-const TextBehind: React.FC<{ dur: number; word: string; cut: string; top: number; rot: number; size?: number }> = ({ dur, word, cut, top, rot, size = 380 }) => {
+export const TextBehind: React.FC<{ dur: number; word: string; cut: string; top: number; rot: number; size?: number }> = ({ dur, word, cut, top, rot, size = 380 }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const s = spring({ frame: frame - 6, fps, config: { damping: 13, mass: 0.7 } });
@@ -219,8 +219,6 @@ const EndCard: React.FC = () => {
 };
 
 export const Brush: React.FC = () => {
-  const fl = seg("fluff");
-  const dt = seg("detox");
   const ri = seg("ritual");
   const wk = seg("willkommen");
   return (
@@ -236,15 +234,6 @@ export const Brush: React.FC = () => {
           <Footage s={s} first={i === 0} last={i === LAYOUT.length - 1} />
         </Sequence>
       ))}
-      <Sequence from={fl.from} durationInFrames={fl.dur}>
-        <TextBehind dur={fl.dur} word="FLUFF" cut="brush/fluff-cut.webm" top={760} rot={-8} />
-      </Sequence>
-      <Sequence from={dt.from} durationInFrames={dt.dur}>
-        <TextBehind dur={dt.dur} word="SOFT" cut="brush/soft-cut.webm" top={360} rot={-5} size={400} />
-      </Sequence>
-      <Sequence from={ri.from} durationInFrames={ri.dur}>
-        <TextBehind dur={ri.dur} word="TREAT" cut="brush/treat-cut.webm" top={820} rot={-6} size={360} />
-      </Sequence>
       <Sequence from={wk.from + 10} durationInFrames={wk.dur - 20}>
         <SpaCard term="Willkommen" sub="Heute: Fell-Treatment" dur={wk.dur - 20} />
       </Sequence>
