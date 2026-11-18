@@ -75,8 +75,8 @@ const Bird: React.FC<{ t: number }> = ({ t }) => {
 const RunningSamoyed: React.FC<{ t: number }> = ({ t }) => {
   const p = interpolate(t, [3.35, 4.3], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
   if (t < 3.35 || t > 4.3) return null;
-  const w = 160; // Breite im Hauskoordinatensystem (Fenster ist 180 breit)
-  const h = (w * 300) / 680;
+  const w = 165; // Breite im Hauskoordinatensystem (Fenster ist 180 breit)
+  const h = (w * 431) / 900;
   const x = SKY.x - w + p * (SKY.w + w);
   const y = SKY.y + SKY.h * 0.6 - h / 2;
   const g = t * 24;
