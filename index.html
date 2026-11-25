@@ -18,10 +18,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <style>
-/* VOICE: ruhig, hochwertig, zurückhaltend – Reise-App statt Spielzeug
+/* VOICE: ruhig, hochwertig, zurückhaltend, Reise-App statt Spielzeug
    IDEA: ein stilles Reisejournal für Mensch und Hund; jeder Ort ist ein Bild mit klarer Regel
    PICTURE: erdige Landschaftsszenen oder eigene Fotos, Glas-Panels; gezeichnete Karte Südbayerns
-   COLOUR and TYPE: Off-White #f6f5f1, Tinte #121210, Oliv/Erdtöne, gedämpfte Ampel; Inter 300–500
+   COLOUR and TYPE: Off-White #f6f5f1, Tinte #121210, Oliv/Erdtöne, gedämpfte Ampel; Inter 300 bis 500
    LAYOUT: App-Rahmen max. 440px, Pill-Tabs, große Bildkarten, schwebende Leiste, Bottom-Sheets */
 :root{color-scheme:light dark;--bg:light-dark(#f6f5f1,#11110e);--card:light-dark(#fff,#1b1b17);--soft:light-dark(#eeece6,#23231e);--ink:light-dark(#121210,#f1efe8);--mut:light-dark(#86837b,#9a978d);--line:light-dark(#e4e1d9,#2d2d27);--ok:#6f8f5e;--mid:#c49a4a;--no:#b4614c;--paw:light-dark(rgba(18,18,16,.07),rgba(241,239,232,.07));--land:light-dark(#ebe8df,#1c1c17);--land2:light-dark(#e2ded2,#24241d);--lake:light-dark(#c9d3d0,#2a3634);--alp1:light-dark(#d6d4c2,#2a2b23);--alp2:light-dark(#bdbca5,#34352c);--alp3:light-dark(#a3a38b,#3f4035);--forest:light-dark(#dfe2cf,#20241b);--road:light-dark(#d8d2c2,#3a382f);--city:light-dark(#e4ded0,#262520);--river:light-dark(#b4c6c8,#2f4446);--border:light-dark(#b9b1a0,#4a463b)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
@@ -263,12 +263,12 @@ const DEMO={huette:["#8c8f6e","#5d6247","#3d4030"],hike:["#a8a07c","#6e6a4c","#2
 const RT={Y:"Hunde erlaubt",N:"Keine Hunde",S:"Nur kleine Hunde",SM:"Kleine & mittlere Hunde",C:"Nur getragen",NP:"Keine Welpen",MZ:"Mit Leine / Maulkorb",A:"Nur nach Anmeldung / auf Anfrage",E:"Mit Einschränkung","?":"Regeln noch offen"};
 const AREAS=["Zimmer","Lager","Gaststube","Terrasse","Innenraum","Übernachtung","Biergarten","Wanderweg","Uferweg","Hundestrand","Seilbahn","Restaurant"];
 const INDOOR=["Innenraum","Gaststube","Zimmer","Restaurant"],STAY=["Übernachtung","Zimmer"],FREE=["Kiesbänke","Hundestrand","Uferweg"];
-// Projektion für die Alpenkarte (Leinwand 1900×1000, lon 7.6–14.6, lat 45.85–48.3)
+// Projektion für die Alpenkarte (Leinwand 1900×1000, lon 7.6 bis 14.6, lat 45.85 bis 48.3)
 const LON0=7.6,LON1=14.6,LAT0=48.3,LAT1=45.85,MA=2.375;
 const px=lon=>+((lon-LON0)/(LON1-LON0)*100).toFixed(2),py=lat=>+((LAT0-lat)/(LAT0-LAT1)*100).toFixed(2);
 const km=(la,lo)=>{const R=6371,r=Math.PI/180,a=Math.sin((la-48.137)*r/2)**2+Math.cos(48.137*r)*Math.cos(la*r)*Math.sin((lo-11.575)*r/2)**2;return Math.round(2*R*Math.asin(Math.sqrt(a)))};
 // Berghütten aus Alicias Google-Maps-Liste „Berghütten mit Hund“: [Name, lat, lon, Region, Land, Hinweis aus der Liste, Regeln, Flags]
-const OPEN=[["Hunde","?","laut Liste hundefreundlich – Details noch offen"]],ASK=t=>[["Aufenthalt & Übernachtung","A",t||"vorher abklären"]];
+const OPEN=[["Hunde","?","laut Liste hundefreundlich, Details noch offen"]],ASK=t=>[["Aufenthalt & Übernachtung","A",t||"vorher abklären"]];
 const HUTS=[
 ["Vorderkaiserfeldenhütte",47.62,12.17,"Kaisergebirge","at","",OPEN],
 ["Vajolethütte",46.44,11.62,"Rosengarten, Dolomiten","it","",OPEN],
@@ -286,7 +286,7 @@ const HUTS=[
 ["Santnerpasshütte",46.46,11.61,"Rosengarten, Dolomiten","it","Nächtigung mit Hund vorab abklären",ASK("Nächtigung vorab abklären")],
 ["Edelrauthütte",46.95,11.73,"Pfunderer Berge, Südtirol","it","Hund willkommen, wenn er Menschen und Tiere mag. Vorher anrufen, 20 € Reinigung.",[["Übernachtung","A","vorher anrufen, 20 € Reinigung"],["Voraussetzung","E","Hund muss Menschen und andere Tiere mögen"]]],
 ["Langkofelhütte",46.53,11.74,"Dolomiten","it","Hüttenaufenthalt mit Hund im Vorfeld abklären",ASK()],
-["ÖTK-Hochmölbinghütte",47.58,14.12,"Totes Gebirge","at","Hunde willkommen, vorher anmelden – 2 Zimmer für Hunde",ASK("vorher anmelden – nur 2 Hundezimmer")],
+["ÖTK-Hochmölbinghütte",47.58,14.12,"Totes Gebirge","at","Hunde willkommen, vorher anmelden, 2 Zimmer für Hunde",ASK("vorher anmelden, nur 2 Hundezimmer")],
 ["Peer Alm",null,null,"","at","Haustiere auf Anfrage",ASK("Haustiere auf Anfrage")],
 ["Chamonna Tuoi CAS",46.82,10.13,"Unterengadin","ch","Nur nach Anruf, nur Doppel- oder Spezialzimmer, CHF 10 pro Nacht",[["Zimmer","A","nur nach Anruf, ganzes Zimmer buchen, CHF 10 pro Nacht"],["Lager","N"]]],
 ["Austriahütte",47.46,13.65,"Dachstein","at","Hüttenaufenthalt mit Hund im Vorfeld abklären",ASK()],
@@ -301,7 +301,7 @@ const HUTS=[
 ["Gleiwitzer Hütte",47.21,12.8,"Glocknergruppe","at","Winterraum nur für Gäste mit Hund, nach Absprache, 5 € pro Hund",[["Winterraum","A","nur nach Absprache & Reservierung, 5 € pro Hund"]]],
 ["Sadnighaus",46.95,12.95,"Mölltal, Kärnten","at","",OPEN],
 ["Osnabrücker Hütte",47.07,13.32,"Ankogelgruppe","at","Mit der Hüttenwirtin vorab absprechen",ASK("vorab mit der Hüttenwirtin absprechen")],
-["Hannoverhaus",47.04,13.2,"Ankogel","at","1 Hundezimmer",[["Hundezimmer","A","nur 1 Hundezimmer – früh reservieren"]]],
+["Hannoverhaus",47.04,13.2,"Ankogel","at","1 Hundezimmer",[["Hundezimmer","A","nur 1 Hundezimmer, früh reservieren"]]],
 ["Zupalseehütte",47.02,12.46,"Virgental, Osttirol","at","Unkompliziert",[["Übernachtung","Y","unkompliziert"]]],
 ["Lasörlinghütte",46.96,12.46,"Osttirol","at","Hund 5 € · nur zu Fuß erreichbar",[["Übernachtung","Y","5 € pro Hund"],["Zustieg","E","nur zu Fuß, kein Radweg"]]],
 ["Berghotel Rudolfshütte",47.13,12.62,"Weißsee, Hohe Tauern","at","Vierbeiner herzlich willkommen",[["Hotel","Y","Hunde herzlich willkommen"]],"h"],
@@ -324,7 +324,7 @@ const HUTS=[
 ["Zufallhütte",46.47,10.65,"Martelltal, Südtirol","it","",OPEN],
 ["Zammer Alm",47.17,10.6,"Zams, Tirol","at","",OPEN],
 ["Winnebachseehütte",47.1,11.06,"Ötztaler Alpen","at","",OPEN],
-["Ingolstädter Haus",47.48,12.88,"Steinernes Meer","at","Mit Hund im Nebenhaus (als Lager buchen), sehr eng",[["Übernachtung","E","im Nebenhaus, als Lager buchen – sehr eng"]]],
+["Ingolstädter Haus",47.48,12.88,"Steinernes Meer","at","Mit Hund im Nebenhaus (als Lager buchen), sehr eng",[["Übernachtung","E","im Nebenhaus, als Lager buchen, sehr eng"]]],
 ["Grawandhütte",47.02,11.8,"Zillertal","at","",OPEN],
 ["Oberhauser Hütte",null,null,"","at","",OPEN,"c"],
 ["Almbad Sillberghaus",47.67,11.98,"Bayrischzell","de","",OPEN],
@@ -340,7 +340,7 @@ const LOCAL=[
  {id:5,n:"Café Flausch",t:"cafe",a:"München · Glockenbach",reg:"muc",lat:48.13,lon:11.57,r:[["Innenraum","Y","Napf & Leckerli an der Theke"],["Terrasse","Y"]],chk:[2,22],demo:1},
  {id:6,n:"Wirtshaus Zur Linde",t:"food",a:"München · Au",reg:"muc",lat:48.125,lon:11.595,r:[["Biergarten","Y"],["Gaststube","SM","große Hunde nur im Biergarten"]],chk:[18,11],demo:1},
  {id:10,n:"Isarrunde am Flaucher",t:"walk",a:"München · Sendling",reg:"muc",lat:48.105,lon:11.555,r:[["Uferweg","Y"],["Kiesbänke","Y","Freilauf erlaubt"]],chk:[1,40],demo:1},
- {id:7,n:"Badebucht am Steg",t:"see",a:"Starnberger See",reg:"de",lat:47.95,lon:11.33,r:[["Hundestrand","Y","1. Mai – 30. Sept. nur bis 9 Uhr"],["Liegewiese","N"]],chk:[9,17],demo:1}].map(p=>({...p,x:px(p.lon),y:py(p.lat),km:km(p.lat,p.lon)}));
+ {id:7,n:"Badebucht am Steg",t:"see",a:"Starnberger See",reg:"de",lat:47.95,lon:11.33,r:[["Hundestrand","Y","1. Mai bis 30. Sept. nur bis 9 Uhr"],["Liegewiese","N"]],chk:[9,17],demo:1}].map(p=>({...p,x:px(p.lon),y:py(p.lat),km:km(p.lat,p.lon)}));
 const PLACES=HUTP.concat(LOCAL);
 const PENDING=[
  {id:101,n:"Hundestrand Ammersee-Süd",t:"see",a:"Ammersee",reg:"de",lat:47.92,lon:11.12,x:px(11.12),y:py(47.92),by:"Lena & Bruno",ab:"golden",ago:"vor 2 Tagen",need:5,have:3,r:[["Hundestrand","Y","ganzjährig"],["Kiosk","Y"]],demo:1},
@@ -348,18 +348,18 @@ const PENDING=[
 const KENZEN=1000+HUTS.findIndex(h=>h[0]==="Kenzenhütte");
 const KIMG="kenzen.jpg";
 const BLOG=[{id:1,place:KENZEN,title:"Zur Kenzenhütte mit Nuki",by:"Alicia & Nuki",av:"samojede",date:"Herbst 2026",paws:0,draft:1,img:[KIMG],
- text:"Hier kommt dein Bericht hin, Alicia – tippe auf „Weiter schreiben“.\n\nIdeen für die Gliederung: Anreise & Parken · der Weg (Länge, Höhenmeter, wie anstrengend für Nuki) · Wasserstellen unterwegs · Ankommen auf der Hütte: wie wurdet ihr empfangen, wo durfte Nuki hin? · Übernachten mit Hund · eure Tipps für andere Hundebesitzer."}];
+ text:"Hier kommt dein Bericht hin, Alicia. Tippe auf „Weiter schreiben“.\n\nIdeen für die Gliederung: Anreise & Parken · der Weg (Länge, Höhenmeter, wie anstrengend für Nuki) · Wasserstellen unterwegs · Ankommen auf der Hütte: wie wurdet ihr empfangen, wo durfte Nuki hin? · Übernachten mit Hund · eure Tipps für andere Hundebesitzer."}];
 const EVENTS=[
  {id:1,d:"29",m:"Nov",mo:11,n:"Samojeden-Spaziergang",t:"walk",k:"Treffen",w:"Englischer Garten · 10:00",x:"Flauschige Runde mit Kaffeestopp. Alle Rassen willkommen.",g:18},
- {id:2,d:"06",m:"Dez",mo:12,n:"Hunde-Weihnachtsmarkt",t:"cafe",k:"Markt",w:"Haidhausen · 14–19 Uhr",x:"Leckerli, Halsbänder, Fotoecke und Glühwein für die Menschen.",g:42},
+ {id:2,d:"06",m:"Dez",mo:12,n:"Hunde-Weihnachtsmarkt",t:"cafe",k:"Markt",w:"Haidhausen · 14 bis 19 Uhr",x:"Leckerli, Halsbänder, Fotoecke und Glühwein für die Menschen.",g:42},
  {id:3,d:"13",m:"Dez",mo:12,n:"Hüttenwanderung mit Hund",t:"huette",k:"Wanderung",w:"Ammergauer Alpen · 9:00",x:"Gemeinsame Tour zu einer hundefreundlichen Hütte, ca. 2,5 h, mittelschwer.",g:12},
  {id:4,d:"10",m:"Jan",mo:1,n:"Welpentreff Indoor",t:"food",k:"Treffen",w:"Sendling · 16:00",x:"Spielen und Sozialisieren im Warmen. Für Welpen bis 6 Monate.",g:9},
  {id:5,d:"17",m:"Jan",mo:1,n:"Fotowalk im Schnee",t:"hike",k:"Wanderung",w:"Spitzingsee · 11:00",x:"Tipps für Fotos mit Hund im Winterlicht.",g:15}
 ];
 const INK="#3b2219",CR="#f4ead6",BL="#bcd6ef",RD="#e2463b",BR="#4a2b20";
 const BREEDS={samojede:["Samojede",{f:"#fbf8f1",i:INK,fl:1,ear:"p",tail:"curl",len:1,leg:1,sn:1}],golden:["Golden Retriever",{f:CR,i:RD,ear:"f",ec:RD,tail:"feather",len:1.05,leg:1,sn:1,fe:1}],labrador:["Labrador",{f:BR,i:CR,ear:"f",tail:"straight",len:1.05,leg:1,sn:1.05}],dackel:["Dackel",{f:RD,i:INK,ear:"l",ec:RD,tail:"straight",len:1.7,leg:.45,sn:1.2,pt:CR}],frenchie:["Frz. Bulldogge",{f:CR,i:INK,ear:"b",tail:"stub",len:.72,leg:.8,sn:.4,pt:BR}],border:["Border Collie",{f:BR,i:CR,ear:"h",tail:"feather",len:1.1,leg:1,sn:1,chest:CR}],mops:["Mops",{f:"#e9d6b2",i:INK,ear:"s",ec:BR,tail:"curl",len:.8,leg:.75,sn:.35,mask:BR}],husky:["Husky",{f:BL,i:INK,ear:"p",tail:"curl",len:1.05,leg:1,sn:1.15,chest:"#fbf8f1"}],mix:["Mischling",{f:BL,i:INK,ear:"f",ec:BR,tail:"up",len:1,leg:1,sn:1,dots:1}]};
-const SIZE={S:["Klein","bis ca. 10 kg"],M:["Mittel","10 – 25 kg"],L:["Groß","über 25 kg"]};
-const AGE={P:["Welpe","unter 1 Jahr"],A:["Erwachsen","1 – 8 Jahre"],O:["Senior","ab ca. 8 Jahren"]};
+const SIZE={S:["Klein","bis ca. 10 kg"],M:["Mittel","10 bis 25 kg"],L:["Groß","über 25 kg"]};
+const AGE={P:["Welpe","unter 1 Jahr"],A:["Erwachsen","1 bis 8 Jahre"],O:["Senior","ab ca. 8 Jahren"]};
 
 // ================= Speicher & Helfer =================
 const ld=(k,v)=>{try{return JSON.parse(localStorage.getItem(k))??v}catch(e){return v}};
@@ -395,7 +395,7 @@ async function dbInit(){if(!window.supabase){DB.err="Datenbank-Bibliothek nicht 
   DB.uid=session.user.id;await dbLoad();DB.on=true;DB.err="";render()}catch(e){console.warn("Nooks-DB:",e);DB.err=String(e.message||e);render()}}
 async function upImg(src){if(!/^data:/.test(src))return src;const b=await (await fetch(src)).blob();const path=DB.uid+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
  const {error}=await DB.sb.storage.from("photos").upload(path,b,{contentType:"image/jpeg"});if(error)throw error;return DB.sb.storage.from("photos").getPublicUrl(path).data.publicUrl}
-const allPlaces=()=>DB.on?DB.places.concat(LOCAL):PLACES.concat(PENDING,S.community);
+const allPlaces=()=>DB.on?DB.places:PLACES.concat(PENDING,S.community);
 const isPending=p=>p.db?p.status==="pending":p.need&&(p.have+(S.confirms[p.id]?1:0))<p.need;
 
 // ================= Regeln gegen Hundeprofil =================
@@ -463,20 +463,20 @@ const LOGO_W="logo-white.png",LOGO_B="logo-blue.png";
 const hapt=(()=>{let lb=null;try{const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");i.id="hapt";i.style.display="none";lb=document.createElement("label");lb.htmlFor="hapt";lb.style.display="none";document.body.append(i,lb)}catch(e){}
  return(ms=8)=>{try{if(navigator.vibrate)navigator.vibrate(ms);else if(lb)lb.click()}catch(e){}}})();
 // ================= Spruch des Tages (eigene Sprüche) =================
-const QUOTES=["Für {d} bist du die ganze Welt.", "Heute wird ein guter Spaziergang. {d} freut sich schon auf dich.", "Jeder Schritt mit {d} ist eine kleine Liebeserklärung.", "{d} merkt sich nicht, wohin ihr gegangen seid – nur, dass ihr zusammen wart.", "Du bist {d}s Lieblingsmensch. Heute und jeden Tag.", "Die schönsten Momente passieren auf vier Pfoten und zwei Beinen.", "Ein Blick von {d} sagt mehr als tausend Worte.", "Heute ist ein guter Tag, um einfach zusammen draußen zu sein.", "Zuhause ist da, wo {d} auf dich wartet.", "Geh heute langsam. {d} genießt jeden Meter mit dir.", "Danke sagen geht auch mit einer extra Runde.", "{d} braucht keinen perfekten Tag – nur dich.", "Die Welt ist laut. {d} hört trotzdem nur auf dich.", "Jede Pfotenspur erzählt von einem guten Tag zu zweit.", "Ein wedelnder Schwanz ist die ehrlichste Freude der Welt.", "Heute schon gesagt? {d} ist der beste Hund.", "Manche Liebe hat vier Pfoten und eine kalte Nase.", "Mit {d} wird aus jedem Weg ein Lieblingsweg.", "Gönnt euch heute eine Pause im Gras. Einfach so.", "{d} vergisst nie, wie schön es mit dir ist.", "Kleine Abenteuer, große Liebe.", "Für {d} ist jeder Spaziergang mit dir der beste.", "Wer einen Hund hat, ist nie ganz allein.", "Heute wird ein guter Spaziergang. Versprochen.", "Ein Kopf auf deinem Knie heilt mehr, als man denkt.", "{d} wartet nicht auf das perfekte Wetter. Nur auf dich.", "Schau heute mal in {d}s Augen. Da steht alles drin.", "Treue riecht ein bisschen nach nassem Fell.", "Die schönste Begleitung braucht keine Worte.", "Zeit mit {d} ist nie verlorene Zeit.", "Ihr zwei gegen den Rest der Welt – oder wenigstens gegen den Regen."];
+const QUOTES=["Für {d} bist du die ganze Welt.", "Heute wird ein guter Spaziergang. {d} freut sich schon auf dich.", "Jeder Schritt mit {d} ist eine kleine Liebeserklärung.", "{d} merkt sich nicht, wohin ihr gegangen seid. Nur, dass ihr zusammen wart.", "Du bist {d}s Lieblingsmensch. Heute und jeden Tag.", "Die schönsten Momente passieren auf vier Pfoten und zwei Beinen.", "Ein Blick von {d} sagt mehr als tausend Worte.", "Heute ist ein guter Tag, um einfach zusammen draußen zu sein.", "Zuhause ist da, wo {d} auf dich wartet.", "Geh heute langsam. {d} genießt jeden Meter mit dir.", "Danke sagen geht auch mit einer extra Runde.", "{d} braucht keinen perfekten Tag. Nur dich.", "Die Welt ist laut. {d} hört trotzdem nur auf dich.", "Jede Pfotenspur erzählt von einem guten Tag zu zweit.", "Ein wedelnder Schwanz ist die ehrlichste Freude der Welt.", "Heute schon gesagt? {d} ist der beste Hund.", "Manche Liebe hat vier Pfoten und eine kalte Nase.", "Mit {d} wird aus jedem Weg ein Lieblingsweg.", "Gönnt euch heute eine Pause im Gras. Einfach so.", "{d} vergisst nie, wie schön es mit dir ist.", "Kleine Abenteuer, große Liebe.", "Für {d} ist jeder Spaziergang mit dir der beste.", "Wer einen Hund hat, ist nie ganz allein.", "Heute wird ein guter Spaziergang. Versprochen.", "Ein Kopf auf deinem Knie heilt mehr, als man denkt.", "{d} wartet nicht auf das perfekte Wetter. Nur auf dich.", "Schau heute mal in {d}s Augen. Da steht alles drin.", "Treue riecht ein bisschen nach nassem Fell.", "Die schönste Begleitung braucht keine Worte.", "Zeit mit {d} ist nie verlorene Zeit.", "Ihr zwei gegen den Rest der Welt. Oder wenigstens gegen den Regen."];
 const dayKey=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
 const quoteToday=()=>{const d=new Date(),start=new Date(d.getFullYear(),0,0);return QUOTES[Math.floor((d-start)/864e5)%QUOTES.length].replace(/\{d\}/g,P?P.dog:"dein Hund")};
 // ================= Onboarding =================
 const MARK=`<svg class="mark" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="18"/><path d="M8 27 16 16l5 6 4-5 7 10"/></svg>`;
-const splash=()=>`<div class="splash screen">${scene({t:"peak",sc:["#9a9a86","#55584a","#1c1d17"]},"sp")}<img class="logo" src="${LOGO_W}" alt="Nooks"><div class="cap">München · Alpen · Seen</div><h1>Jeder Ort.<br>Klar für deinen Hund.</h1><p>Wo darf dein Hund mit – und wo nicht.</p><button class="ob-btn" data-a="start">Los geht's</button><div class="legal">Geprüft von Hundebesitzern, für Hundebesitzer.</div></div>`;
+const splash=()=>`<div class="splash screen">${scene({t:"peak",sc:["#9a9a86","#55584a","#1c1d17"]},"sp")}<img class="logo" src="${LOGO_W}" alt="Nooks"><div class="cap">Weltweit · Berge · Seen · Städte</div><h1>Die Community<br>für dich und deinen Hund.</h1><p>Finde heraus, wo dein Hund mitdarf und wo nicht.</p><button class="ob-btn" data-a="start">Los geht's</button><div class="legal">Geprüft von Hundebesitzern, für Hundebesitzer.</div></div>`;
 const avatarPicker=(pr,attr)=>`<div class="avs"><label class="avb ${pr.photo?"on":""}" style="cursor:pointer" data-upload="${attr}">${pr.photo?`<img src="${pr.photo}" alt="">`:`<span class="up">${I("cam",20)}<br>Foto</span>`}</label>${Object.keys(BREEDS).map(k=>`<button class="avb ${!pr.photo&&pr.avatar===k?"on":""}" data-${attr}="${k}" aria-label="${BREEDS[k][0]}" title="${BREEDS[k][0]}">${breedSvg(k)}</button>`).join("")}</div>`;
 const STEPS=[
  d=>`<h2>Wer seid ihr zwei?</h2><p class="sub">Damit wir euch richtig begrüßen können.</p>
   <label class="l" for="fo">Dein Name</label><input class="f" id="fo" value="${esc(d.owner)}" placeholder="z. B. Alicia" autocomplete="given-name">
   <label class="l" for="fd">Name deines Hundes</label><input class="f" id="fd" value="${esc(d.dog)}" placeholder="z. B. Nuki">
-  <label class="l">Profilbild – eigenes Foto oder Rasse wählen</label>${avatarPicker(d,"oav")}`,
+  <label class="l">Profilbild: eigenes Foto oder Rasse wählen</label>${avatarPicker(d,"oav")}`,
  d=>`<h2>Wie groß ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">Viele Orte erlauben nur bestimmte Größen.</p>`+Object.entries(SIZE).map(([k,v])=>`<button class="opt ${d.size===k?"on":""}" data-set="size:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join(""),
- d=>`<h2>Kannst du ${esc(d.dog||"deinen Hund")} tragen?</h2><p class="sub">Auf dem Arm oder in einer Tasche – manche Orte lassen nur so Hunde rein.</p>`+[["Y","Ja, entspannt","auf dem Arm oder in der Tasche"],["N","Nein","zu groß oder mag es nicht"]].map(([k,t,s])=>`<button class="opt ${d.carry===k?"on":""}" data-set="carry:${k}"><b>${t}</b><small>${s}</small></button>`).join(""),
+ d=>`<h2>Kannst du ${esc(d.dog||"deinen Hund")} tragen?</h2><p class="sub">Auf dem Arm oder in einer Tasche, manche Orte lassen nur so Hunde rein.</p>`+[["Y","Ja, entspannt","auf dem Arm oder in der Tasche"],["N","Nein","zu groß oder mag es nicht"]].map(([k,t,s])=>`<button class="opt ${d.carry===k?"on":""}" data-set="carry:${k}"><b>${t}</b><small>${s}</small></button>`).join(""),
  d=>`<h2>Was interessiert euch am meisten?</h2><p class="sub">Wähle so viele, wie du magst.</p><div class="tiles">`+ICAT.map(k=>`<button class="tile ${d.int.includes(k)?"on":""}" data-int="${k}" aria-pressed="${d.int.includes(k)}">${scene({t:k},"t"+k)}<span>${CATS[k]}</span></button>`).join("")+`</div>`,
  d=>`<h2>Wie alt ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">Für Welpen und Senioren gelten oft eigene Regeln.</p>`+Object.entries(AGE).map(([k,v])=>`<button class="opt ${d.age===k?"on":""}" data-set="age:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join("")];
 const LAST=STEPS.length-1;
@@ -498,7 +498,7 @@ function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filte
  ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
  <h3 class="sec">Berichte<button data-tab="community" data-ct="blog">Alle Berichte</button></h3><div class="stack">${posts.map(postCard).join("")}</div>
  <h3 class="sec">Nächstes Event<button data-tab="events">Alle Events</button></h3>${evRow(EVENTS[0])}
- <h3 class="sec">Am nächsten an München<button data-tab="map">Auf der Karte</button></h3>
+ <h3 class="sec">Orte entdecken<button data-tab="map">Auf der Karte</button></h3>
  <div class="legend"><span><i class="dot" style="background:var(--ok)"></i>erlaubt</span><span><i class="dot" style="background:var(--mid)"></i>mit Einschränkung / auf Anfrage</span><span><i class="dot" style="background:var(--no)"></i>nicht erlaubt</span></div>
  ${near.map(row).join("")||`<div class="empty">Hier gibt's noch nichts.</div>`}
  <button class="btn ghost w" data-tab="map" style="margin-top:6px">Alle ${L.length} Orte auf der Karte</button>
@@ -508,13 +508,13 @@ function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filte
 function filtered(F=S.F){const q=S.q.toLowerCase();return allPlaces().filter(p=>(!F.cats.length||F.cats.includes(p.t))&&(!F.reg.length||F.reg.includes(p.reg))&&(!F.fit||verdict(p,P)==="ok")&&(!F.indoor||has(p,INDOOR))&&(!F.stay||has(p,STAY))&&(!F.free||p.r.some(r=>FREE.includes(r[0])||/Freilauf/.test(r[2]||"")))&&(!q||(p.n+" "+p.a+" "+CATS[p.t]).toLowerCase().includes(q)))}
 const fcount=()=>{const F=S.F;return F.cats.length+F.reg.length+[F.fit,F.indoor,F.stay,F.free].filter(Boolean).length};
 // Echte Vektorkarte (MapLibre + OpenFreeMap, kein API-Schlüssel nötig)
-const REGIONS=[["Bayern & Tirol",[[46.9,10.2],[48.2,13.1]]],["Alle Alpen",[[45.8,7.5],[48.3,14.7]]],["München",[[48.06,11.45],[48.2,11.7]]],["Südtirol",[[46.3,11.0],[47.1,12.4]]],["Salzburg & Kärnten",[[46.4,12.4],[47.8,14.4]]],["Schweiz",[[45.8,7.5],[47.4,10.3]]]];
+const REGIONS=[["Weltweit",[[-50,-150],[65,160]]],["Bayern & Tirol",[[46.9,10.2],[48.2,13.1]]],["Alle Alpen",[[45.8,7.5],[48.3,14.7]]],["München",[[48.06,11.45],[48.2,11.7]]],["Südtirol",[[46.3,11.0],[47.1,12.4]]],["Salzburg & Kärnten",[[46.4,12.4],[47.8,14.4]]],["Schweiz",[[45.8,7.5],[47.4,10.3]]]];
 let LM=null,LMEL=null;
 const MSTYLE="https://tiles.openfreemap.org/styles/positron";
 const lb=b=>[[b[0][1],b[0][0]],[b[1][1],b[1][0]]]; // [lat,lon] -> [lon,lat]
 let LMARK=[];
 function drawMap(){const slot=$("mapslot");if(!slot)return;const ML=window.maplibregl;
- if(!ML){slot.innerHTML='<p class="note" style="padding:20px">Karte lädt nicht – bitte Internetverbindung prüfen.</p>';return}
+ if(!ML){slot.innerHTML='<p class="note" style="padding:20px">Karte lädt nicht. Bitte Internetverbindung prüfen.</p>';return}
  if(!LMEL){LMEL=document.createElement("div");LMEL.style.cssText="position:absolute;inset:0"}
  slot.appendChild(LMEL); // erst einhängen, dann Karte anlegen
  if(!LM){LM=new ML.Map({container:LMEL,style:MSTYLE,bounds:lb(REGIONS[0][1]),fitBoundsOptions:{padding:20},attributionControl:{compact:true},dragRotate:false,pitchWithRotate:false});
@@ -563,7 +563,7 @@ function community(){const pend=allPlaces().filter(p=>p.need&&isPending(p));cons
  <h3 class="sec">Hilf mit beim Prüfen<span>${pend.length} offen</span></h3>
  ${pend.map(p=>{const have=p.have+(S.confirms[p.id]?1:0);return `<div class="box" style="margin:0 0 10px"><div class="feed" style="border:0;padding:0 0 10px"><span class="av">${p.photoBy?`<img src="${p.photoBy}" alt="">`:breedSvg(p.ab||"mix")}</span><span><b>${esc(p.n)}</b><small style="display:block">${meta(p)} · gemeldet von ${esc(p.by)} ${esc(p.ago||"")}</small></span></div>
   <div class="bar"><i style="width:${have/p.need*100}%"></i></div><p class="note" style="margin:0 0 10px">${have} von ${p.need} Bestätigungen</p>
-  <div class="btns">${S.confirms[p.id]?`<span class="it">Danke fürs Bestätigen!</span>`:`<button class="ob2" data-confirm="${p.id}">Ich war da – stimmt</button>`}<button class="ob2" data-open="${p.id}">Ansehen</button></div></div>`}).join("")||`<div class="empty">Alles geprüft – danke!</div>`}
+  <div class="btns">${S.confirms[p.id]?`<span class="it">Danke fürs Bestätigen!</span>`:`<button class="ob2" data-confirm="${p.id}">Ich war da, stimmt</button>`}<button class="ob2" data-open="${p.id}">Ansehen</button></div></div>`}).join("")||`<div class="empty">Alles geprüft, danke!</div>`}
  <h3 class="sec">Von dir gemeldet</h3>${mineL.length?mineL.map(row).join(""):`<p class="note">Noch keine Orte gemeldet.</p>`}
  <h3 class="sec">Zuletzt aktiv</h3>
  <div class="feed"><span class="av">${breedSvg("dackel")}</span><span>Mia &amp; Luna haben <b>Café Flausch</b> bestätigt<small style="display:block">vor 3 Stunden</small></span></div>
@@ -586,11 +586,11 @@ function detail(){const p=allPlaces().find(x=>x.id===S.id);if(!p){S.view="main";
  return `<div class="det screen"><div class="hero">${visual(p,"d"+p.id)}<button class="back" data-a="back" aria-label="Zurück">${I("back",22)}</button><span class="tagtop">${CATS[p.t]}${p.km!=null?" · "+p.km+" km von München":""}</span><label class="photobtn" data-upload="detail">${I("cam",16)} Foto ${photos[p.id]?"ändern":"hinzufügen"}</label></div>
  <div class="panel"><h2>${esc(p.n)} <span>· ${esc(p.a)}</span></h2><div class="hash">#${CATS[p.t]} #mitHund #${esc(p.a.split(" ")[0])}${p.by?" · gemeldet von "+esc(p.by):""}</div>
  <div class="links">${typeof p.web==="string"&&/^https?:\/\//.test(p.web)?`<a class="lk" href="${esc(p.web)}" target="_blank" rel="noopener">${I("ext",16)} Zur Website</a>`:""}<a class="lk" href="${route}" target="_blank" rel="noopener">${I("route",16)} In Google Maps öffnen</a>${p.lat==null?`<span class="note" style="align-self:center">Pin auf der Karte folgt</span>`:""}</div>
- ${pend?`<div class="box" style="margin:12px 0"><p style="margin:0"><b>Wird von der Community geprüft</b></p><p class="note" style="margin:4px 0 0">Noch nicht bestätigt – Angaben können abweichen.</p></div>`:""}
+ ${pend?`<div class="box" style="margin:12px 0"><p style="margin:0"><b>Wird von der Community geprüft</b></p><p class="note" style="margin:4px 0 0">Noch nicht bestätigt, Angaben können abweichen.</p></div>`:""}
  ${p.closed?`<div class="box" style="margin:12px 0"><p style="margin:0"><b>Laut Google Maps vorübergehend geschlossen</b></p></div>`:""}
- <div class="verdict ${v}"><b>${v==="mid"?"Mit Einschränkung für":VTXT[v]+" für"} ${esc(P.dog)}</b>${v==="ok"?"Überall willkommen.":v==="mid"?"Nicht überall oder nur nach Anmeldung – schau dir die Details an.":"Hier leider nicht. Schau dir Alternativen an."}</div>
+ <div class="verdict ${v}"><b>${v==="mid"?"Mit Einschränkung für":VTXT[v]+" für"} ${esc(P.dog)}</b>${v==="ok"?"Überall willkommen.":v==="mid"?"Nicht überall oder nur nach Anmeldung, schau dir die Details an.":"Hier leider nicht. Schau dir Alternativen an."}</div>
  ${p.r.map(r=>{const o=ok(r[1],P),c=o===1?"ok":o?"mid":"no";return `<div class="rule"><span class="ic" style="background:var(--${c})">${o===1?"✓":o?"!":"✕"}</span><div><b>${esc(r[0])}</b><small>${RT[r[1]]}${r[2]?" · "+esc(r[2]):""}</small></div></div>`}).join("")}
- ${p.note?`<div class="box"><p style="margin:0 0 6px"><b>${p.srcName&&!p.src?"Hinweis aus der Recherche":"Hinweis aus der Liste"}</b></p><p class="it" style="margin:0">„${esc(p.note)}“</p><p class="note" style="margin:8px 0 0">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln können sich ändern – vor dem Besuch bei der Hütte bestätigen.</p></div>`:(p.src||p.srcName)?`<p class="note">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln vor dem Besuch bei der Hütte bestätigen.</p>`:""}
+ ${p.note?`<div class="box"><p style="margin:0 0 6px"><b>${p.srcName&&!p.src?"Hinweis aus der Recherche":"Hinweis aus der Liste"}</b></p><p class="it" style="margin:0">„${esc(p.note)}“</p><p class="note" style="margin:8px 0 0">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln können sich ändern, vor dem Besuch bei der Hütte bestätigen.</p></div>`:(p.src||p.srcName)?`<p class="note">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln vor dem Besuch bei der Hütte bestätigen.</p>`:""}
  <h3 class="sec">Berichte<button data-a="newpost">+ Bericht schreiben</button></h3>${allPosts().filter(b=>b.place===p.id).map(postRow).join("")||`<p class="note">Noch kein Bericht zu diesem Ort.</p>`}
  ${p.chk||p.src?`<div class="box"><p><b>Stimmt das noch?</b><br><span class="note">${p.chk?`Zuletzt bestätigt vor ${p.chk[0]} Tagen von ${p.chk[1]+(vote==="y"?1:0)} Hundebesitzern`:`Warst du mit Hund dort? Hilf anderen mit einer Bestätigung.`}</span></p>${vote?`<p class="it" style="margin:0">Danke, ${esc(P.owner)}! ${vote==="y"?"Bestätigt.":"Wir prüfen das."}</p>`:`<div class="btns"><button class="ob2" data-vote="y">Ja, stimmt</button><button class="ob2" data-vote="n">Nein, hat sich geändert</button></div>`}</div>`:""}
  <div class="cta"><div><b>${on?"Gemerkt":"Merken"}</b><small>für euren nächsten Ausflug</small></div><button data-save="${p.id}">${on?"♥ Gespeichert":"♡ Speichern"}</button></div></div></div>`}
@@ -615,7 +615,7 @@ function postView(){const b=allPosts().find(x=>x.id===S.pid);if(!b){S.view="main
 function postSheet(){const f=S.pf;const opts=allPlaces().slice().sort((a,b)=>a.n.localeCompare(b.n,"de"));
  return `<div class="grab"></div><h2>${f.id?"Bericht bearbeiten":"Neuer Bericht"}</h2><p class="note" style="font-size:14px;margin:0 0 6px">Erzähl anderen Hundebesitzern, wie es wirklich war.</p>
  <label class="l" for="bt">Titel</label><input class="f" id="bt" value="${esc(f.title)}" placeholder="z. B. Zur Kenzenhütte mit Nuki">
- <label class="l" for="bp">Ort</label><select class="f" id="bp"><option value="">– ohne Ort –</option>${opts.map(p=>`<option value="${p.id}" ${f.place===p.id?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
+ <label class="l" for="bp">Ort</label><select class="f" id="bp"><option value="">Ohne Ort</option>${opts.map(p=>`<option value="${p.id}" ${f.place===p.id?"selected":""}>${esc(p.n)}</option>`).join("")}</select>
  <label class="l">Fotos</label><div class="avs">${(f.img||[]).map((u,i)=>`<span class="avb" style="position:relative"><img src="${u}" alt=""><button class="xbtn" style="position:absolute;top:2px;right:2px;width:24px;height:24px" data-delimg="${i}" aria-label="Foto entfernen">${I("x",12)}</button></span>`).join("")}<label class="avb" style="cursor:pointer" data-upload="post"><span class="up">${I("plus",20)}<br>Foto</span></label></div>
  <label class="l" for="bx">Dein Bericht</label><textarea class="f" id="bx" rows="10" style="min-height:220px">${esc(f.text)}</textarea>
  <label class="l">Wie hundefreundlich war's?</label><div class="chips">${[1,2,3,4,5].map(n=>`<button class="chip ${f.paws===n?"on":""}" data-paws="${n}">${n} 🐾</button>`).join("")}</div>
@@ -626,9 +626,9 @@ async function savePost(draft){keepPost();const f=S.pf;if(!f.title.trim())return
    const old=allPosts().find(x=>x.id===f.id);const row={place_id:f.place&&f.place>=100000?f.place-100000:null,title:f.title.trim(),body:f.text.trim(),images:imgs,paws:f.paws||0,draft:!!draft,author_name:P.owner+" & "+P.dog,author_avatar:P.avatar,updated_at:new Date().toISOString()};
    const q=old&&old.dbid?DB.sb.from("posts").update(row).eq("id",old.dbid).select().single():DB.sb.from("posts").insert(row).select().single();
    const {data,error}=await q;if(error)throw error;await dbLoad();closeSheet();S.pid=200000+data.id;go("post");toast(draft?"Entwurf gespeichert":"Bericht veröffentlicht")}
-  catch(e){toast("Speichern fehlgeschlagen – bitte nochmal versuchen");console.warn(e)}return}
+  catch(e){toast("Speichern fehlgeschlagen, bitte nochmal versuchen");console.warn(e)}return}
  const b={id:f.id||Date.now(),place:f.place,title:f.title.trim(),text:f.text.trim(),img:f.img||[],paws:f.paws||0,draft:draft?1:0,by:P.owner+" & "+P.dog,av:P.avatar,photoBy:P.photo,date:new Date().toLocaleDateString("de-DE",{day:"numeric",month:"short",year:"numeric"})};
- S.posts=S.posts.filter(x=>x.id!==b.id).concat(b);if(!sv("nk4-posts",S.posts)){toast("Fotos zu groß – nur für diese Sitzung gespeichert")}else toast(draft?"Entwurf gespeichert":"Bericht veröffentlicht");
+ S.posts=S.posts.filter(x=>x.id!==b.id).concat(b);if(!sv("nk4-posts",S.posts)){toast("Fotos zu groß, nur für diese Sitzung gespeichert")}else toast(draft?"Entwurf gespeichert":"Bericht veröffentlicht");
  closeSheet();S.pid=b.id;go("post")}
 
 // ================= Profil & Rechtliches =================
@@ -640,21 +640,21 @@ function profile(){const sv_=allPlaces().filter(p=>S.saved.includes(p.id));
  <h3 class="sec">Größe</h3><div class="chips">${Object.entries(SIZE).map(([k,v])=>`<button class="chip ${P.size===k?"on":""}" data-p="size:${k}">${v[0]}</button>`).join("")}</div>
  <h3 class="sec">Tragbar</h3><div class="chips">${[["Y","Ja"],["N","Nein"]].map(([k,t])=>`<button class="chip ${P.carry===k?"on":""}" data-p="carry:${k}">${t}</button>`).join("")}</div>
  <h3 class="sec">Alter</h3><div class="chips">${Object.entries(AGE).map(([k,v])=>`<button class="chip ${P.age===k?"on":""}" data-p="age:${k}">${v[0]}</button>`).join("")}</div>
- <p class="note" style="margin-top:22px">${DB.on?"● Verbunden mit der Nooks-Community – Orte, Berichte und Bestätigungen sehen alle.":DB.err?"○ Offline-Modus – Daten bleiben auf diesem Gerät. ("+esc(DB.err)+")":"○ Verbinde mit der Nooks-Community …"}</p>
+ <p class="note" style="margin-top:22px">${DB.on?"● Verbunden mit der Nooks-Community. Orte, Berichte und Bestätigungen sehen alle.":DB.err?"○ Offline-Modus: Daten bleiben auf diesem Gerät. ("+esc(DB.err)+")":"○ Verbinde mit der Nooks-Community …"}</p>
  <h3 class="sec">Rechtliches</h3><div class="list"><button class="li" data-legal="impressum">Impressum<span>${I("chev",18)}</span></button><button class="li" data-legal="datenschutz">Datenschutz<span>${I("chev",18)}</span></button><button class="li" data-a="reset">Onboarding neu starten<span>${I("chev",18)}</span></button></div>
  <span style="display:block;width:max-content;margin:28px auto 6px;background:#045aff;border-radius:14px;padding:8px 14px"><img src="${LOGO_W}" alt="Nooks" style="height:26px;display:block"></span><p class="note" style="text-align:center;margin:0">Prototyp</p></div>`}
 const ph=t=>`<span class="ph">${t}</span>`;
 function legal(){const imp=S.legal==="impressum";return `<div class="pg screen legaltxt"><button class="xbtn" data-a="legalback" aria-label="Zurück" style="width:44px;height:44px">${I("back",20)}</button>
- <h2 style="margin-top:16px">${imp?"Impressum":"Datenschutz"}</h2><div class="warn">Vorlage mit Platzhaltern. Vor dem Launch mit echten Angaben füllen und rechtlich prüfen lassen – das hier ist keine Rechtsberatung.</div>
+ <h2 style="margin-top:16px">${imp?"Impressum":"Datenschutz"}</h2><div class="warn">Vorlage mit Platzhaltern. Vor dem Launch mit echten Angaben füllen und rechtlich prüfen lassen. Das hier ist keine Rechtsberatung.</div>
  ${imp?`<h3>Angaben gemäß § 5 DDG</h3><p>${ph("Vor- und Nachname / Firma")}<br>${ph("Straße Hausnummer")}<br>${ph("PLZ Ort")}</p>
  <h3>Kontakt</h3><p>E-Mail: ${ph("hallo@…")}<br>Telefon: ${ph("optional")}</p>
  <h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3><p>${ph("Name, Anschrift")}</p>
  <h3>Umsatzsteuer-ID</h3><p>${ph("falls vorhanden")}</p>
  <h3>Nutzerinhalte</h3><p>Orte, Regeln, Fotos und Bewertungen werden von der Community beigetragen. Wir prüfen Meldungen, können aber nicht für die Aktualität jeder Angabe garantieren. Hinweise auf falsche Angaben bitte an ${ph("E-Mail")}.</p>`
  :`<h3>1. Verantwortlicher</h3><p>${ph("Name, Anschrift, E-Mail")}</p>
- <h3>2. Welche Daten wir verarbeiten</h3><p>Profilangaben (dein Name, Name, Größe, Alter und Tragbarkeit deines Hundes, Interessen), Profilbild, gemerkte Orte, Event-Teilnahmen, von dir gemeldete Orte, Fotos und Bestätigungen sowie – nur mit deiner Zustimmung – deinen Standort.</p>
+ <h3>2. Welche Daten wir verarbeiten</h3><p>Profilangaben (dein Name, Name, Größe, Alter und Tragbarkeit deines Hundes, Interessen), Profilbild, gemerkte Orte, Event-Teilnahmen, von dir gemeldete Orte, Fotos und Bestätigungen sowie, nur mit deiner Zustimmung, deinen Standort.</p>
  <h3>3. Zweck und Rechtsgrundlage</h3><p>Personalisierte Anzeige, ob Orte für deinen Hund erlaubt sind; Bereitstellung der Community-Funktionen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und lit. a (Einwilligung, z. B. Standort).</p>
- <h3>4. Dienstleister</h3><p>Datenbank und Foto-Speicher: Supabase (Server in London, Vereinigtes Königreich – für das die EU ein angemessenes Datenschutzniveau anerkennt), Kartendienst OpenFreeMap mit Daten von OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an OpenFreeMap übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
+ <h3>4. Dienstleister</h3><p>Datenbank und Foto-Speicher: Supabase (Server in London, Vereinigtes Königreich, für das die EU ein angemessenes Datenschutzniveau anerkennt), Kartendienst OpenFreeMap mit Daten von OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an OpenFreeMap übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
  <h3>5. Speicherdauer</h3><p>Solange dein Konto besteht. Nach Löschung des Kontos werden deine Daten ${ph("innerhalb von X Tagen")} gelöscht; öffentlich beigetragene Orte bleiben anonymisiert erhalten.</p>
  <h3>6. Deine Rechte</h3><p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Widerruf von Einwilligungen; Beschwerde bei einer Datenschutz-Aufsichtsbehörde, in Bayern z. B. dem ${ph("BayLDA")}.</p>
  <h3>7. Kontakt</h3><p>${ph("Datenschutz-E-Mail")}</p>
@@ -729,7 +729,7 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(a==="fapply"){S.F=S.T;S.sel=0;closeSheet();render()}
  if(a==="unsel"){e.stopPropagation();S.sel=0;render()}
  if(a==="legalback"){S.legal="";render()}
- if(a==="demolink")toast("Beispielort – der echte Link kommt mit den echten Daten");
+ if(a==="demolink")toast("Beispielort, der echte Link kommt mit den echten Daten");
  if(a==="addplace"){S.form={n:"",t:"huette",a:"",x:null,y:null,r:[["Terrasse","Y"]],web:"",img:""};openSheet(addSheet())}
  if(a==="addrule"){keepForm();S.form.r.push(["Innenraum","Y"]);openSheet(addSheet())}
  if(a==="closesheet")closeSheet();
@@ -742,7 +742,7 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
   const reg=f.lat>48&&f.lon>11.3&&f.lon<11.85?"muc":f.lat>47.55&&f.lon<13?"de":f.lon<9.6?"ch":f.lat<46.95&&f.lon>10.5?"it":"at";
   if(DB.on){(async()=>{try{toast("Wird gesendet …");const photo=f.img?await upImg(f.img):null;const web=/^https?:\/\//.test(f.web.trim())?f.web.trim():null;
     const {error}=await DB.sb.from("places").insert({name:f.n.trim(),cat:f.t,area:f.a.trim(),region:reg,lat:f.lat,lon:f.lon,rules:f.r.map(r=>[r[0],r[1]]),web,photo_url:photo,author_name:P.owner+" & "+P.dog,author_avatar:P.avatar});
-    if(error)throw error;await dbLoad();closeSheet();S.tab="community";S.ctab="orte";render();toast("Danke! Der Ort wird jetzt geprüft.")}catch(e){console.warn(e);toast("Senden fehlgeschlagen – bitte nochmal versuchen")}})();return}
+    if(error)throw error;await dbLoad();closeSheet();S.tab="community";S.ctab="orte";render();toast("Danke! Der Ort wird jetzt geprüft.")}catch(e){console.warn(e);toast("Senden fehlgeschlagen, bitte nochmal versuchen")}})();return}
   const id=Date.now();const np={id,n:f.n.trim(),t:f.t,a:f.a.trim(),reg:f.lat>48&&f.lon>11.3&&f.lon<11.85?"muc":f.lat>47.55&&f.lon<13?"de":f.lon<9.6?"ch":f.lat<46.95&&f.lon>10.5?"it":"at",lat:f.lat,lon:f.lon,x:px(f.lon),y:py(f.lat),r:f.r.map(r=>[r[0],r[1]]),web:f.web.trim(),by:P.owner+" & "+P.dog,ab:P.avatar,photoBy:P.photo,ago:"gerade eben",need:5,have:0};
   if(f.img)photos[id]=f.img;S.community.push(np);sv("nk4-comm",S.community);sv("nk4-photos",photos);closeSheet();S.tab="community";render();toast("Danke! Der Ort wird jetzt geprüft.")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet();if(e.key==="Enter"&&e.target.dataset?.open){S.id=+e.target.dataset.open;go("detail")}});
