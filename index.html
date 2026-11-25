@@ -36,20 +36,25 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}b{
 @keyframes drift{0%{transform:translate(0,0) rotate(var(--r))}50%{transform:translate(calc(var(--dx)*.6),calc(var(--dy)*-.4)) rotate(calc(var(--r) + 12deg))}100%{transform:translate(var(--dx),var(--dy)) rotate(calc(var(--r) - 10deg))}}
 /* Splash */
 .mark{position:absolute!important;top:44px;left:50%;transform:translateX(-50%);width:40px;height:40px;opacity:.9}
-.splash{min-height:100vh;background:#fff;color:#121210;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px 44px;gap:0}
-.splash .logo{width:min(64%,280px);margin:0 auto 26px;display:block}
-.splash .hero2{position:relative;width:min(100%,420px);aspect-ratio:4/3;border-radius:28px;overflow:hidden;margin-bottom:28px;box-shadow:0 18px 40px rgba(20,20,10,.12)}
-.splash .ob-btn{border:0;background:#121210;color:#fff;backdrop-filter:none}
-.splash .legal{color:#86837b;opacity:1}
-.hlogo{height:40px;display:block;margin:0 0 6px -2px;box-sizing:content-box}
-:root[data-theme=dark] .hlogo{background:#fff;border-radius:12px;padding:6px 10px}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .hlogo{background:#fff;border-radius:12px;padding:6px 10px}}
+.splash{position:relative;min-height:100vh;color:#f1efe8;display:flex;flex-direction:column;justify-content:flex-end;padding:40px 28px calc(48px + env(safe-area-inset-bottom));text-align:center;overflow:hidden}
+.splash>svg.sc{position:absolute;inset:0;width:100%;height:100%}
+.splash::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,14,0) 30%,rgba(17,17,14,.85) 78%)}
+.splash>*:not(svg){position:relative;z-index:1}
+.splash .logo{width:min(62%,260px);margin:0 auto 34px;display:block}
+.hband{position:relative;height:128px;border-radius:26px;overflow:hidden;margin-bottom:18px;display:flex;align-items:center;justify-content:center}
+.hband svg.sc{position:absolute;inset:0;width:100%;height:100%}
+.hband::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,14,.05),rgba(17,17,14,.45))}
+.hband img{position:relative;z-index:1;height:54px}
+.qcard{display:grid;grid-template-columns:76px minmax(0,1fr);gap:14px;align-items:center;background:var(--card);border-radius:22px;padding:8px 16px 8px 8px;margin:18px 0 4px}
+.qcard .qi{position:relative;width:76px;height:76px;border-radius:16px;overflow:hidden}
+.qcard small{display:block;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--mut);margin-bottom:3px}
+.qcard p{margin:0;font-style:italic;font-size:16px;line-height:1.4}
 .quote{display:flex;gap:8px;align-items:flex-start;margin:8px 0 18px;color:var(--mut);font-style:italic;font-size:15px;line-height:1.45}
 .quote svg{flex:none;width:16px;height:16px;fill:var(--mut);margin-top:3px;opacity:.7}
 .splash h1{font-weight:300;font-size:38px;line-height:1.1;margin:0 0 10px;letter-spacing:-.5px}
 .cap{letter-spacing:.35em;text-transform:uppercase;font-size:11px;font-weight:400}
-.splash .cap{color:#86837b;margin-bottom:12px}
-.splash p{margin:0 0 28px;color:#86837b;font-size:15px}
+.splash .cap{opacity:.75;margin-bottom:14px}
+.splash p{margin:0 0 30px;opacity:.8;font-size:15px}
 .ob-btn{border:1px solid rgba(241,239,232,.6);background:rgba(255,255,255,.06);backdrop-filter:blur(10px);color:#f1efe8;border-radius:999px;padding:13px 34px;min-height:50px;align-self:center}
 .legal{font-size:11px;opacity:.55;margin-top:18px}
 /* Onboarding */
@@ -148,7 +153,7 @@ nav svg{width:22px;height:22px}
 .compass{position:absolute;right:16px;top:104px;width:28px;height:28px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:11px;font-weight:500;z-index:4;box-shadow:0 2px 8px rgba(20,20,10,.1)}
 .mk{position:absolute;transform:translate(-50%,-50%);border:0;background:var(--card);color:var(--ink);border-radius:999px;padding:5px 11px 5px 9px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 3px 10px rgba(20,20,10,.18);min-height:30px;z-index:2}
 .mk{position:relative;transform:translate(-50%,-50%)!important;justify-content:center;width:26px;height:26px;min-height:0;padding:0;cursor:pointer}.mk.on{transform:translate(-50%,-50%) scale(1.08)!important}
-.leaflet-container{font-family:inherit;background:var(--land)}.leaflet-control-attribution{font-size:10px}.leaflet-bottom.leaflet-right{margin-bottom:96px}.mk .dot{width:10px;height:10px}.mk .nm{display:none}.mk.on{width:auto;padding:5px 12px 5px 10px}.mk.on .nm{display:inline}
+.leaflet-container{font-family:inherit;background:var(--land)}.leaflet-tile-pane{filter:saturate(.55) sepia(.12) brightness(1.03)}.leaflet-control-attribution{font-size:10px}.leaflet-bottom.leaflet-right{margin-bottom:96px}.mk .dot{width:10px;height:10px}.mk .nm{display:none}.mk.on{width:auto;padding:5px 12px 5px 10px}.mk.on .nm{display:inline}
 .mk.l{transform:translate(-12%,-50%)}.mk.r{transform:translate(-88%,-50%)}
 .mk.on{background:var(--ink);color:var(--bg);z-index:3;transform:translate(-50%,-50%) scale(1.08)}
 .mk.l.on{transform:translate(-12%,-50%) scale(1.08)}.mk.r.on{transform:translate(-88%,-50%) scale(1.08)}
@@ -423,13 +428,17 @@ function particles(){const L0=$("paws");if(!L0)return;const n=innerWidth>700?26:
  L0.innerHTML=h}
 particles();
 
-const LOGO_B="logo-blue.png",LOGO_W="logo-blue.png";
+const LOGO_W="logo-white.png";
+// ================= Haptisches Feedback =================
+// Android: Vibration-API. iPhone (iOS 18+): Safari löst beim Umschalten eines versteckten Schalters ein Haptik-Signal aus. iPads haben keinen Vibrationsmotor.
+const hapt=(()=>{let lb=null;try{const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");i.id="hapt";i.style.display="none";lb=document.createElement("label");lb.htmlFor="hapt";lb.style.display="none";document.body.append(i,lb)}catch(e){}
+ return(ms=8)=>{try{if(navigator.vibrate)navigator.vibrate(ms);else if(lb)lb.click()}catch(e){}}})();
 // ================= Spruch des Tages (eigene Sprüche) =================
-const QUOTES=["Der beste Weg ist der, auf dem dein Hund vorausläuft.","Pfoten zuerst, Pläne später.","Jeder Ort wird schöner, wenn jemand mit dem Schwanz wedelt.","Heute zählt nur eins: frische Luft und ein voller Napf.","Gute Tage beginnen mit einer kalten Schnauze am Kissen.","Wer mit Hund wandert, ist nie zu spät – nur gründlicher.","Pausen sind zum Schnüffeln da.","Die schönsten Aussichten teilt man auf vier und zwei Beinen.","Ein Hund kennt keinen schlechten Weg, nur neue Gerüche.","Matschige Pfoten, glückliche Herzen.","Zuhause ist da, wo dein Hund sich hinlegt.","Heute ist ein guter Tag für einen Umweg.","Langsam gehen heißt mehr entdecken – frag deinen Hund.","Jede Hütte ist gemütlicher mit Fell unterm Tisch.","Folge der Nase, nicht der Uhr.","Ein Leckerli in der Tasche öffnet jede Tür.","Abenteuer beginnen an der Haustür.","Weniger Plan, mehr Pfote.","Glück riecht nach nassem Fell und Bergluft.","Die Lieblingsrunde bleibt die beste Runde.","Pfotenabdrücke sind die schönsten Unterschriften.","Regen ist nur Wetter mit mehr Gerüchen.","Zusammen wird jeder Weg zum Lieblingsweg.","Ein müder Hund ist ein glücklicher Hund.","Sonne tanken, Stöckchen suchen, wiederholen.","Neugier ist das beste Navi.","Jeder Tag verdient ein Schwanzwedeln.","Der Gipfel kann warten – erst mal am Wegrand schnuppern.","Kleine Runden, große Freude.","Wer Hunde liebt, findet überall ein Plätzchen.","Heute schon jemanden angestupst?"];
+const QUOTES=[{q:"Der beste Weg ist der, auf dem dein Hund vorausläuft.",t:"walk"},{q:"Pfoten zuerst, Pläne später.",t:"walk"},{q:"Jeder Ort wird schöner, wenn jemand mit dem Schwanz wedelt.",t:"walk"},{q:"Heute zählt nur eins: frische Luft und ein voller Napf.",t:"cafe"},{q:"Gute Tage beginnen mit einer kalten Schnauze am Kissen.",t:"cafe"},{q:"Wer mit Hund wandert, ist nie zu spät – nur gründlicher.",t:"huette"},{q:"Pausen sind zum Schnüffeln da.",t:"walk"},{q:"Die schönsten Aussichten teilt man auf vier und zwei Beinen.",t:"hike"},{q:"Ein Hund kennt keinen schlechten Weg, nur neue Gerüche.",t:"walk"},{q:"Matschige Pfoten, glückliche Herzen.",t:"walk"},{q:"Zuhause ist da, wo dein Hund sich hinlegt.",t:"cafe"},{q:"Heute ist ein guter Tag für einen Umweg.",t:"walk"},{q:"Langsam gehen heißt mehr entdecken – frag deinen Hund.",t:"walk"},{q:"Jede Hütte ist gemütlicher mit Fell unterm Tisch.",t:"huette"},{q:"Folge der Nase, nicht der Uhr.",t:"walk"},{q:"Ein Leckerli in der Tasche öffnet jede Tür.",t:"cafe"},{q:"Abenteuer beginnen an der Haustür.",t:"walk"},{q:"Weniger Plan, mehr Pfote.",t:"hike"},{q:"Glück riecht nach nassem Fell und Bergluft.",t:"huette"},{q:"Die Lieblingsrunde bleibt die beste Runde.",t:"walk"},{q:"Pfotenabdrücke sind die schönsten Unterschriften.",t:"walk"},{q:"Regen ist nur Wetter mit mehr Gerüchen.",t:"see"},{q:"Zusammen wird jeder Weg zum Lieblingsweg.",t:"walk"},{q:"Ein müder Hund ist ein glücklicher Hund.",t:"walk"},{q:"Sonne tanken, Stöckchen suchen, wiederholen.",t:"walk"},{q:"Neugier ist das beste Navi.",t:"hike"},{q:"Jeder Tag verdient ein Schwanzwedeln.",t:"walk"},{q:"Der Gipfel kann warten – erst mal am Wegrand schnuppern.",t:"huette"},{q:"Kleine Runden, große Freude.",t:"walk"},{q:"Wer Hunde liebt, findet überall ein Plätzchen.",t:"walk"},{q:"Heute schon jemanden angestupst?",t:"walk"}];
 const quoteToday=()=>{const d=new Date(),start=new Date(d.getFullYear(),0,0);return QUOTES[Math.floor((d-start)/864e5)%QUOTES.length]};
 // ================= Onboarding =================
 const MARK=`<svg class="mark" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="20" cy="20" r="18"/><path d="M8 27 16 16l5 6 4-5 7 10"/></svg>`;
-const splash=()=>`<div class="splash screen"><img class="logo" src="${LOGO_B}" alt="Nooks"><div class="hero2">${scene({t:"peak",sc:["#b9b9a6","#6d705f","#3a3c31"]},"sp")}</div><div class="cap">München · Alpen · Seen</div><h1>Jeder Ort.<br>Klar für deinen Hund.</h1><p>Wo darf dein Hund mit – und wo nicht.</p><button class="ob-btn" data-a="start">Los geht's</button><div class="legal">Geprüft von Hundebesitzern, für Hundebesitzer.</div></div>`;
+const splash=()=>`<div class="splash screen">${scene({t:"peak",sc:["#9a9a86","#55584a","#1c1d17"]},"sp")}<img class="logo" src="${LOGO_W}" alt="Nooks"><div class="cap">München · Alpen · Seen</div><h1>Jeder Ort.<br>Klar für deinen Hund.</h1><p>Wo darf dein Hund mit – und wo nicht.</p><button class="ob-btn" data-a="start">Los geht's</button><div class="legal">Geprüft von Hundebesitzern, für Hundebesitzer.</div></div>`;
 const avatarPicker=(pr,attr)=>`<div class="avs"><label class="avb ${pr.photo?"on":""}" style="cursor:pointer" data-upload="${attr}">${pr.photo?`<img src="${pr.photo}" alt="">`:`<span class="up">${I("cam",20)}<br>Foto</span>`}</label>${Object.keys(BREEDS).map(k=>`<button class="avb ${!pr.photo&&pr.avatar===k?"on":""}" data-${attr}="${k}" aria-label="${BREEDS[k][0]}" title="${BREEDS[k][0]}">${breedSvg(k)}</button>`).join("")}</div>`;
 const STEPS=[
  d=>`<h2>Wer seid ihr zwei?</h2><p class="sub">Damit wir euch richtig begrüßen können.</p>
@@ -453,7 +462,8 @@ function row(p){const v=verdict(p,P);return `<button class="row" data-open="${p.
 function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filter(p=>S.cat==="all"||p.t===S.cat);const rank=p=>({ok:0,mid:1,no:2})[verdict(p,P)];
  const picks=L.filter(p=>(S.cat!=="all"||mine().includes(p.t))&&verdict(p,P)!=="no"&&!p.closed).sort((a,b)=>rank(a)-rank(b)||(a.km??999)-(b.km??999)).slice(0,8);
  const near=L.slice().sort((a,b)=>(a.km??9999)-(b.km??9999)).slice(0,8);const order=["all"].concat(mine(),ICAT.filter(k=>!mine().includes(k)));const posts=allPosts().slice(0,4);
- return `<div class="pg screen"><img class="hlogo" src="${LOGO_B}" alt="Nooks"><p class="quote">${PAW}<span>${quoteToday()}</span></p><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
+ return `<div class="pg screen"><div class="hband">${scene({t:"peak",sc:["#9a9a86","#55584a","#2a2b22"]},"hb")}<img src="${LOGO_W}" alt="Nooks"></div><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
+ ${(()=>{const q=quoteToday();return `<div class="qcard"><span class="qi">${scene({t:q.t},"q")}</span><span><small>Spruch des Tages</small><p>${q.q}</p></span></div>`})()}
  <div class="pills">${order.map(k=>`<button class="pill ${S.cat===k?"on":""}" data-cat="${k}">${CATS[k]}</button>`).join("")}</div>
  ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
  <h3 class="sec">Berichte<button data-tab="community" data-ct="blog">Alle Berichte</button></h3><div class="stack">${posts.map(postCard).join("")}</div>
@@ -467,14 +477,14 @@ function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filte
 // ================= Karte mit Filter (Airbnb-Logik) =================
 function filtered(F=S.F){const q=S.q.toLowerCase();return allPlaces().filter(p=>(!F.cats.length||F.cats.includes(p.t))&&(!F.reg.length||F.reg.includes(p.reg))&&(!F.fit||verdict(p,P)==="ok")&&(!F.indoor||has(p,INDOOR))&&(!F.stay||has(p,STAY))&&(!F.free||p.r.some(r=>FREE.includes(r[0])||/Freilauf/.test(r[2]||"")))&&(!q||(p.n+" "+p.a+" "+CATS[p.t]).toLowerCase().includes(q)))}
 const fcount=()=>{const F=S.F;return F.cats.length+F.reg.length+[F.fit,F.indoor,F.stay,F.free].filter(Boolean).length};
-// Echte Karte (Leaflet + CARTO/OpenStreetMap)
+// Echte Karte (Leaflet + OpenStreetMap, kein API-Schlüssel nötig)
 const REGIONS=[["Bayern & Tirol",[[46.9,10.2],[48.2,13.1]]],["Alle Alpen",[[45.8,7.5],[48.3,14.7]]],["München",[[48.06,11.45],[48.2,11.7]]],["Südtirol",[[46.3,11.0],[47.1,12.4]]],["Salzburg & Kärnten",[[46.4,12.4],[47.8,14.4]]],["Schweiz",[[45.8,7.5],[47.4,10.3]]]];
 let LM=null,LMEL=null,LMK=null;
 function drawMap(){const slot=$("mapslot");if(!slot)return;if(!window.L){slot.innerHTML='<p class="note" style="padding:20px">Karte lädt nicht – bitte Internetverbindung prüfen.</p>';return}
  if(!LMEL){LMEL=document.createElement("div");LMEL.style.cssText="position:absolute;inset:0"}
  slot.appendChild(LMEL); // erst einhängen, dann Karte anlegen – sonst kennt sie ihre Größe nicht
  if(!LM){LM=L.map(LMEL,{zoomControl:false,center:[47.45,11.6],zoom:7});L.control.zoom({position:"bottomright"}).addTo(LM);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:19,subdomains:"abcd",attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>'}).addTo(LM);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(LM);
   LMK=L.layerGroup().addTo(LM);LM.on("click",()=>{if(S.sel){S.sel=0;render()}});
   requestAnimationFrame(()=>{LM.invalidateSize();LM.fitBounds(REGIONS[0][1])})}
  else requestAnimationFrame(()=>LM.invalidateSize());
@@ -591,7 +601,7 @@ function profile(){const sv_=allPlaces().filter(p=>S.saved.includes(p.id));
  <h3 class="sec">Tragbar</h3><div class="chips">${[["Y","Ja"],["N","Nein"]].map(([k,t])=>`<button class="chip ${P.carry===k?"on":""}" data-p="carry:${k}">${t}</button>`).join("")}</div>
  <h3 class="sec">Alter</h3><div class="chips">${Object.entries(AGE).map(([k,v])=>`<button class="chip ${P.age===k?"on":""}" data-p="age:${k}">${v[0]}</button>`).join("")}</div>
  <h3 class="sec">Rechtliches</h3><div class="list"><button class="li" data-legal="impressum">Impressum<span>${I("chev",18)}</span></button><button class="li" data-legal="datenschutz">Datenschutz<span>${I("chev",18)}</span></button><button class="li" data-a="reset">Onboarding neu starten<span>${I("chev",18)}</span></button></div>
- <img src="${LOGO_B}" alt="Nooks" style="height:26px;display:block;margin:28px auto 4px;opacity:.8"><p class="note" style="text-align:center;margin:0">Prototyp</p></div>`}
+ <span style="display:block;width:max-content;margin:28px auto 6px;background:#045aff;border-radius:14px;padding:8px 14px"><img src="${LOGO_W}" alt="Nooks" style="height:26px;display:block"></span><p class="note" style="text-align:center;margin:0">Prototyp</p></div>`}
 const ph=t=>`<span class="ph">${t}</span>`;
 function legal(){const imp=S.legal==="impressum";return `<div class="pg screen legaltxt"><button class="xbtn" data-a="legalback" aria-label="Zurück" style="width:44px;height:44px">${I("back",20)}</button>
  <h2 style="margin-top:16px">${imp?"Impressum":"Datenschutz"}</h2><div class="warn">Vorlage mit Platzhaltern. Vor dem Launch mit echten Angaben füllen und rechtlich prüfen lassen – das hier ist keine Rechtsberatung.</div>
@@ -603,7 +613,7 @@ function legal(){const imp=S.legal==="impressum";return `<div class="pg screen l
  :`<h3>1. Verantwortlicher</h3><p>${ph("Name, Anschrift, E-Mail")}</p>
  <h3>2. Welche Daten wir verarbeiten</h3><p>Profilangaben (dein Name, Name, Größe, Alter und Tragbarkeit deines Hundes, Interessen), Profilbild, gemerkte Orte, Event-Teilnahmen, von dir gemeldete Orte, Fotos und Bestätigungen sowie – nur mit deiner Zustimmung – deinen Standort.</p>
  <h3>3. Zweck und Rechtsgrundlage</h3><p>Personalisierte Anzeige, ob Orte für deinen Hund erlaubt sind; Bereitstellung der Community-Funktionen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und lit. a (Einwilligung, z. B. Standort).</p>
- <h3>4. Dienstleister</h3><p>${ph("Hosting / Datenbank, z. B. Supabase")}, Kartendienst CARTO / OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an CARTO übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
+ <h3>4. Dienstleister</h3><p>${ph("Hosting / Datenbank, z. B. Supabase")}, Kartendienst OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an die OpenStreetMap Foundation übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
  <h3>5. Speicherdauer</h3><p>Solange dein Konto besteht. Nach Löschung des Kontos werden deine Daten ${ph("innerhalb von X Tagen")} gelöscht; öffentlich beigetragene Orte bleiben anonymisiert erhalten.</p>
  <h3>6. Deine Rechte</h3><p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Widerruf von Einwilligungen; Beschwerde bei einer Datenschutz-Aufsichtsbehörde, in Bayern z. B. dem ${ph("BayLDA")}.</p>
  <h3>7. Kontakt</h3><p>${ph("Datenschutz-E-Mail")}</p>
@@ -618,7 +628,7 @@ function bindInputs(){const fo=$("fo"),fd=$("fd");if(fo){const u=()=>{S.draft.ow
 const go=v=>{S.view=v;render();scrollTo(0,0)};
 function openSheet(h){$("sheet").innerHTML=h;document.body.classList.add("sheet-open");bindSheet()}
 function closeSheet(){document.body.classList.remove("sheet-open")}
-function bindSheet(){const mm=$("mm");if(mm&&window.L){const f=S.form;const m=L.map(mm,{zoomControl:true});L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png",{maxZoom:19,subdomains:"abcd",attribution:"© OpenStreetMap · © CARTO"}).addTo(m);
+function bindSheet(){const mm=$("mm");if(mm&&window.L){const f=S.form;const m=L.map(mm,{zoomControl:true});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(m);
  if(f.view)m.setView(f.view[0],f.view[1]);else m.fitBounds(REGIONS[0][1]);let pin=f.lat!=null?L.marker([f.lat,f.lon]).addTo(m):null;setTimeout(()=>m.invalidateSize(),350);
  m.on("click",e=>{f.lat=+e.latlng.lat.toFixed(5);f.lon=+e.latlng.lng.toFixed(5);if(pin)pin.setLatLng(e.latlng);else pin=L.marker(e.latlng).addTo(m)});m.on("moveend",()=>{f.view=[m.getCenter(),m.getZoom()]})}
  document.querySelectorAll("[data-ri]").forEach(s=>s.onchange=()=>{const[i,j]=s.dataset.ri.split(":");S.form.r[i][j]=s.value})}
@@ -634,7 +644,7 @@ $("file").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)r
  else if(upTarget==="place"){keepForm();S.form.img=d;openSheet(addSheet())}
  else if(upTarget==="post"){keepPost();S.pf.img.push(d);openSheet(postSheet())}};
 
-document.addEventListener("click",e=>{const t=e.target.closest("[data-a],[data-set],[data-p],[data-cat],[data-tab],[data-open],[data-save],[data-vote],[data-int],[data-pint],[data-sel],[data-mcat],[data-tg],[data-fc],[data-ev],[data-go],[data-evcat],[data-confirm],[data-legal],[data-upload],[data-oav],[data-pav],[data-delrule],[data-zoom],[data-post],[data-ct],[data-paws],[data-delimg]");if(!t)return;const d=t.dataset;
+document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],.chip,.pill,label.avb,.tg,.mk"))hapt();const t=e.target.closest("[data-a],[data-set],[data-p],[data-cat],[data-tab],[data-open],[data-save],[data-vote],[data-int],[data-pint],[data-sel],[data-mcat],[data-tg],[data-fc],[data-ev],[data-go],[data-evcat],[data-confirm],[data-legal],[data-upload],[data-oav],[data-pav],[data-delrule],[data-zoom],[data-post],[data-ct],[data-paws],[data-delimg]");if(!t)return;const d=t.dataset;
  if(d.upload){e.preventDefault();upTarget=d.upload;$("file").click();return}
  if(d.save){e.stopPropagation();const id=+d.save;S.saved=S.saved.includes(id)?S.saved.filter(x=>x!==id):S.saved.concat(id);sv("nk4-saved",S.saved);toast(S.saved.includes(id)?"Gemerkt ♥":"Entfernt");render();return}
  if(d.open){e.stopPropagation();closeSheet();S.id=+d.open;go("detail");return}
