@@ -42,6 +42,9 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}b{
 .splash>*:not(svg){position:relative;z-index:1}
 .splash .logo{width:min(62%,260px);margin:0 auto 34px;display:block}
 .hlogo{height:30px;width:auto;display:block;margin:2px 0 16px}
+.lg-w{display:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .lg-b{display:none}:root:not([data-theme=light]) .lg-w{display:block}}
+:root[data-theme=dark] .lg-b{display:none}:root[data-theme=dark] .lg-w{display:block}
 .ncard{position:relative;background:light-dark(#fbf8f2,#1f1f19);border:1px solid var(--line);border-radius:22px;padding:18px 20px 22px;margin:18px 18px 26px 0;box-shadow:0 10px 26px rgba(40,35,20,.07)}
 .ncard .nh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .ncard .nh b{font-weight:600;font-size:15px;color:light-dark(#3d4030,#d9d6c6)}
@@ -464,7 +467,7 @@ function row(p){const v=verdict(p,P);return `<button class="row" data-open="${p.
 function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filter(p=>S.cat==="all"||p.t===S.cat);const rank=p=>({ok:0,mid:1,no:2})[verdict(p,P)];
  const picks=L.filter(p=>(S.cat!=="all"||mine().includes(p.t))&&verdict(p,P)!=="no"&&!p.closed).sort((a,b)=>rank(a)-rank(b)||(a.km??999)-(b.km??999)).slice(0,8);
  const near=L.slice().sort((a,b)=>(a.km??9999)-(b.km??9999)).slice(0,8);const order=["all"].concat(mine(),ICAT.filter(k=>!mine().includes(k)));const posts=allPosts().slice(0,4);
- return `<div class="pg screen"><img class="hlogo" src="${LOGO_B}" alt="Nooks"><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
+ return `<div class="pg screen"><img class="hlogo lg-b" src="${LOGO_B}" alt="Nooks"><img class="hlogo lg-w" src="${LOGO_W}" alt="Nooks"><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
  ${(()=>{const on=S.qlike===dayKey();return `<div class="ncard"><div class="nh"><b>Erinnerung</b><span>heute</span></div><p>${esc(quoteToday())}</p><button class="nheart ${on?"on":""}" data-a="likeq" aria-label="Gefällt mir">${heart(true)}</button></div>`})()}
  <div class="pills">${order.map(k=>`<button class="pill ${S.cat===k?"on":""}" data-cat="${k}">${CATS[k]}</button>`).join("")}</div>
  ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
