@@ -14,6 +14,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
 <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <style>
@@ -370,8 +371,32 @@ let P=ld("nk4-profile",null);
 const photos=ld("nk4-photos",{});
 let S={view:P?"main":"splash",tab:"home",step:0,draft:P?{...P}:{owner:"",dog:"",size:"",carry:"",age:"",int:[],avatar:"samojede"},cat:"all",id:0,evcat:"Alle",saved:ld("nk4-saved",[]),qlike:ld("nk4-qlike",""),posts:ld("nk4-posts",[]),pid:0,pf:null,ctab:"blog",going:ld("nk4-going",[]),votes:ld("nk4-votes",{}),community:ld("nk4-comm",[]),confirms:ld("nk4-conf",{}),q:"",sel:0,
  F:{cats:[],fit:false,indoor:false,stay:false,free:false,reg:[]},legal:"",form:null};
-const allPlaces=()=>PLACES.concat(PENDING,S.community);
-const isPending=p=>p.need&&(p.have+(S.confirms[p.id]?1:0))<p.need;
+// ================= Datenbank (Supabase) =================
+// Der Publishable Key ist für Apps gedacht; geschützt wird über Row Level Security (siehe supabase/schema.sql).
+const SB_URL="https://iehiaytlzaorkopmzvly.supabase.co",SB_KEY="sb_publishable_k1HGf_gQM1JWg3JydaImaA_PJ68qWE7";
+const DB={on:false,sb:null,uid:null,err:"",places:[],posts:[],votes:{}};
+const SCS2=[["#8c8f6e","#5d6247","#3d4030"],["#a8a07c","#6e6a4c","#2f3024"],["#9aa392","#5f6a5a","#323a31"],["#b5ab8a","#7d7656","#45422f"],["#a3a89c","#6b7066","#33372f"]];
+const ago=t=>{const d=Math.max(0,Math.round((Date.now()-new Date(t))/864e5));return d===0?"heute":d===1?"gestern":"vor "+d+" Tagen"};
+const fmtDate=t=>new Date(t).toLocaleDateString("de-DE",{day:"numeric",month:"short",year:"numeric"});
+function rowToPlace(r,st){return {id:100000+r.id,dbid:r.id,db:1,n:r.name,t:r.cat,a:r.area||"Lage folgt",reg:r.region,lat:r.lat,lon:r.lon,x:r.lat!=null?px(r.lon):null,y:r.lat!=null?py(r.lat):null,km:r.lat!=null?km(r.lat,r.lon):null,
+ note:r.note||"",r:r.rules||[],closed:r.closed,web:r.web||"",img:r.photo_url||"",sc:SCS2[r.id%5],src:r.source==="liste",approx:!r.exact,status:r.status,
+ by:r.source==="community"?r.author_name:undefined,ab:r.author_avatar,ago:r.source==="community"?ago(r.created_at):"",need:r.need,have:st?+st.yes:0,
+ chk:st&&st.yes>0?[Math.max(0,Math.round((Date.now()-new Date(st.last_at))/864e5)),+st.yes]:null,mine:r.created_by===DB.uid}}
+function rowToPost(r){return {id:200000+r.id,dbid:r.id,place:r.place_id?100000+r.place_id:null,title:r.title,text:r.body,img:r.images||[],paws:r.paws,draft:r.draft?1:0,by:r.author_name||"Jemand",av:r.author_avatar,date:fmtDate(r.created_at),mine:r.created_by===DB.uid}}
+async function dbLoad(){const sb=DB.sb;
+ const [pl,st,po,my]=await Promise.all([sb.from("places").select("*"),sb.from("place_stats").select("*"),sb.from("posts").select("*").order("created_at",{ascending:false}),sb.from("confirmations").select("place_id,vote").eq("user_id",DB.uid)]);
+ if(pl.error)throw pl.error;const stats=Object.fromEntries((st.data||[]).map(r=>[r.place_id,r]));
+ DB.places=pl.data.map(r=>rowToPlace(r,stats[r.id]));DB.posts=(po.data||[]).map(rowToPost);DB.votes=Object.fromEntries((my.data||[]).map(r=>[100000+r.place_id,r.vote]));
+ const k=DB.places.find(p=>p.n==="Kenzenhütte");if(k)BLOG[0].place=k.id}
+async function dbInit(){if(!window.supabase){DB.err="Datenbank-Bibliothek nicht geladen";return}
+ try{DB.sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+  let {data:{session}}=await DB.sb.auth.getSession();
+  if(!session){const r=await DB.sb.auth.signInAnonymously();if(r.error)throw r.error;session=r.data.session}
+  DB.uid=session.user.id;await dbLoad();DB.on=true;DB.err="";render()}catch(e){console.warn("Nooks-DB:",e);DB.err=String(e.message||e);render()}}
+async function upImg(src){if(!/^data:/.test(src))return src;const b=await (await fetch(src)).blob();const path=DB.uid+"/"+Date.now()+"-"+Math.random().toString(36).slice(2,7)+".jpg";
+ const {error}=await DB.sb.storage.from("photos").upload(path,b,{contentType:"image/jpeg"});if(error)throw error;return DB.sb.storage.from("photos").getPublicUrl(path).data.publicUrl}
+const allPlaces=()=>DB.on?DB.places.concat(LOCAL):PLACES.concat(PENDING,S.community);
+const isPending=p=>p.db?p.status==="pending":p.need&&(p.have+(S.confirms[p.id]?1:0))<p.need;
 
 // ================= Regeln gegen Hundeprofil =================
 function ok(code,p){switch(code){case"Y":return 1;case"N":return 0;case"S":return p.size==="S"||p.carry==="Y"?1:0;case"SM":return p.size!=="L"?1:0;case"C":return p.carry==="Y"?1:0;case"NP":return p.age!=="P"?1:0;case"MZ":case"A":case"E":case"?":return .5}return 0}
@@ -528,7 +553,7 @@ function eventSheet(e){const on=S.going.includes(e.id);return `<div class="grab"
  <button class="btn w" data-go="${e.id}">${on?`✓ ${esc(P.dog)} ist dabei`:`Mit ${esc(P.dog)} teilnehmen`}</button>`}
 
 // ================= Community =================
-function community(){const pend=PENDING.concat(S.community).filter(p=>isPending(p));const mineL=S.community;
+function community(){const pend=allPlaces().filter(p=>p.need&&isPending(p));const mineL=DB.on?DB.places.filter(p=>p.mine):S.community;
  const seg=`<div class="seg"><button class="${S.ctab==="blog"?"on":""}" data-ct="blog">Berichte</button><button class="${S.ctab==="orte"?"on":""}" data-ct="orte">Orte melden & prüfen</button></div>`;
  if(S.ctab==="blog"){const ps=allPosts();return `<div class="pg screen"><h2 style="font-weight:300;font-size:30px;margin:4px 0 12px">Community</h2>${seg}
  <button class="btn w" data-a="newpost" style="margin-top:16px">${I("plus",18)} Bericht schreiben</button>
@@ -572,13 +597,14 @@ function detail(){const p=allPlaces().find(x=>x.id===S.id);if(!p){S.view="main";
 
 
 // ================= Berichte (Blog) =================
-const allPosts=()=>{const mineP=S.posts;return mineP.filter(b=>!BLOG.some(x=>x.id===b.id)).reverse().concat(BLOG.map(b=>mineP.find(x=>x.id===b.id)||b))};
+const allPosts=()=>{if(DB.on){const done=DB.posts.some(b=>b.mine&&b.place===BLOG[0].place);return DB.posts.concat(done?[]:BLOG)}
+ const mineP=S.posts;return mineP.filter(b=>!BLOG.some(x=>x.id===b.id)).reverse().concat(BLOG.map(b=>mineP.find(x=>x.id===b.id)||b))};
 const placeOf=id=>allPlaces().find(p=>p.id===id);
 const pawsTxt=n=>n?"🐾".repeat(n)+"<span style='opacity:.25'>"+"🐾".repeat(5-n)+"</span>":"";
 const postImg=(b,cls="pic")=>b.img&&b.img[0]?`<img class="${cls}" src="${b.img[0]}" alt="">`:scene(placeOf(b.place)||{t:"hike"},"pb"+b.id);
 function postCard(b){const pl=placeOf(b.place);return `<div class="big ev" data-post="${b.id}" role="button" tabindex="0">${postImg(b)}${b.draft?`<span class="datebadge" style="padding:6px 10px"><small>Entwurf</small></span>`:""}<div class="glass"><small>${esc(b.by)} · ${esc(b.date)}</small><b>${esc(b.title)}</b>${pl?`<span class="st">${esc(pl.n)}</span>`:""}</div></div>`}
 function postRow(b){const pl=placeOf(b.place);return `<button class="row" data-post="${b.id}"><span class="th">${postImg(b)}</span><span><b>${esc(b.title)}${b.draft?'<span class="badge">Entwurf</span>':""}</b><small>${esc(b.by)}${pl?" · "+esc(pl.n):""}</small></span><span class="note">${esc(b.date)}</span></button>`}
-function postView(){const b=allPosts().find(x=>x.id===S.pid);if(!b){S.view="main";return main()}const pl=placeOf(b.place);const mineB=b.by===P.owner+" & "+P.dog||b.id===1;
+function postView(){const b=allPosts().find(x=>x.id===S.pid);if(!b){S.view="main";return main()}const pl=placeOf(b.place);const mineB=b.mine||(!DB.on&&b.by===P.owner+" & "+P.dog)||b.id===1;
  return `<div class="det screen"><div class="hero" style="height:62vh">${postImg(b)}<button class="back" data-a="back" aria-label="Zurück">${I("back",22)}</button>${b.draft?`<span class="tagtop">Entwurf</span>`:""}</div>
  <div class="panel"><div class="hi" style="gap:10px"><span class="av" style="width:40px;height:40px">${b.photoBy?`<img src="${b.photoBy}" alt="">`:breedSvg(b.av||"mix")}</span><div><b>${esc(b.by)}</b><div class="note">${esc(b.date)}</div></div></div>
  <h2 style="margin-top:16px">${esc(b.title)}</h2>${b.paws?`<p style="margin:6px 0 0">${pawsTxt(b.paws)} <span class="note">Hundefreundlichkeit</span></p>`:""}
@@ -595,7 +621,12 @@ function postSheet(){const f=S.pf;const opts=allPlaces().slice().sort((a,b)=>a.n
  <label class="l">Wie hundefreundlich war's?</label><div class="chips">${[1,2,3,4,5].map(n=>`<button class="chip ${f.paws===n?"on":""}" data-paws="${n}">${n} 🐾</button>`).join("")}</div>
  <div class="sfoot"><button class="skip" data-a="savedraft">Als Entwurf speichern</button><button class="btn" data-a="publishpost">Veröffentlichen</button></div>`}
 function keepPost(){const f=S.pf;if(!f||!$("bt"))return;f.title=$("bt").value;f.place=+$("bp").value||null;f.text=$("bx").value}
-function savePost(draft){keepPost();const f=S.pf;if(!f.title.trim())return toast("Bitte gib einen Titel ein");
+async function savePost(draft){keepPost();const f=S.pf;if(!f.title.trim())return toast("Bitte gib einen Titel ein");
+ if(DB.on){try{toast("Wird gespeichert …");const imgs=[];for(const u of f.img||[])imgs.push(await upImg(u));
+   const old=allPosts().find(x=>x.id===f.id);const row={place_id:f.place&&f.place>=100000?f.place-100000:null,title:f.title.trim(),body:f.text.trim(),images:imgs,paws:f.paws||0,draft:!!draft,author_name:P.owner+" & "+P.dog,author_avatar:P.avatar,updated_at:new Date().toISOString()};
+   const q=old&&old.dbid?DB.sb.from("posts").update(row).eq("id",old.dbid).select().single():DB.sb.from("posts").insert(row).select().single();
+   const {data,error}=await q;if(error)throw error;await dbLoad();closeSheet();S.pid=200000+data.id;go("post");toast(draft?"Entwurf gespeichert":"Bericht veröffentlicht")}
+  catch(e){toast("Speichern fehlgeschlagen – bitte nochmal versuchen");console.warn(e)}return}
  const b={id:f.id||Date.now(),place:f.place,title:f.title.trim(),text:f.text.trim(),img:f.img||[],paws:f.paws||0,draft:draft?1:0,by:P.owner+" & "+P.dog,av:P.avatar,photoBy:P.photo,date:new Date().toLocaleDateString("de-DE",{day:"numeric",month:"short",year:"numeric"})};
  S.posts=S.posts.filter(x=>x.id!==b.id).concat(b);if(!sv("nk4-posts",S.posts)){toast("Fotos zu groß – nur für diese Sitzung gespeichert")}else toast(draft?"Entwurf gespeichert":"Bericht veröffentlicht");
  closeSheet();S.pid=b.id;go("post")}
@@ -609,6 +640,7 @@ function profile(){const sv_=allPlaces().filter(p=>S.saved.includes(p.id));
  <h3 class="sec">Größe</h3><div class="chips">${Object.entries(SIZE).map(([k,v])=>`<button class="chip ${P.size===k?"on":""}" data-p="size:${k}">${v[0]}</button>`).join("")}</div>
  <h3 class="sec">Tragbar</h3><div class="chips">${[["Y","Ja"],["N","Nein"]].map(([k,t])=>`<button class="chip ${P.carry===k?"on":""}" data-p="carry:${k}">${t}</button>`).join("")}</div>
  <h3 class="sec">Alter</h3><div class="chips">${Object.entries(AGE).map(([k,v])=>`<button class="chip ${P.age===k?"on":""}" data-p="age:${k}">${v[0]}</button>`).join("")}</div>
+ <p class="note" style="margin-top:22px">${DB.on?"● Verbunden mit der Nooks-Community – Orte, Berichte und Bestätigungen sehen alle.":DB.err?"○ Offline-Modus – Daten bleiben auf diesem Gerät. ("+esc(DB.err)+")":"○ Verbinde mit der Nooks-Community …"}</p>
  <h3 class="sec">Rechtliches</h3><div class="list"><button class="li" data-legal="impressum">Impressum<span>${I("chev",18)}</span></button><button class="li" data-legal="datenschutz">Datenschutz<span>${I("chev",18)}</span></button><button class="li" data-a="reset">Onboarding neu starten<span>${I("chev",18)}</span></button></div>
  <span style="display:block;width:max-content;margin:28px auto 6px;background:#045aff;border-radius:14px;padding:8px 14px"><img src="${LOGO_W}" alt="Nooks" style="height:26px;display:block"></span><p class="note" style="text-align:center;margin:0">Prototyp</p></div>`}
 const ph=t=>`<span class="ph">${t}</span>`;
@@ -622,11 +654,11 @@ function legal(){const imp=S.legal==="impressum";return `<div class="pg screen l
  :`<h3>1. Verantwortlicher</h3><p>${ph("Name, Anschrift, E-Mail")}</p>
  <h3>2. Welche Daten wir verarbeiten</h3><p>Profilangaben (dein Name, Name, Größe, Alter und Tragbarkeit deines Hundes, Interessen), Profilbild, gemerkte Orte, Event-Teilnahmen, von dir gemeldete Orte, Fotos und Bestätigungen sowie – nur mit deiner Zustimmung – deinen Standort.</p>
  <h3>3. Zweck und Rechtsgrundlage</h3><p>Personalisierte Anzeige, ob Orte für deinen Hund erlaubt sind; Bereitstellung der Community-Funktionen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und lit. a (Einwilligung, z. B. Standort).</p>
- <h3>4. Dienstleister</h3><p>${ph("Hosting / Datenbank, z. B. Supabase")}, Kartendienst OpenFreeMap mit Daten von OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an OpenFreeMap übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
+ <h3>4. Dienstleister</h3><p>Datenbank und Foto-Speicher: Supabase (Server in Frankfurt), Kartendienst OpenFreeMap mit Daten von OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an OpenFreeMap übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
  <h3>5. Speicherdauer</h3><p>Solange dein Konto besteht. Nach Löschung des Kontos werden deine Daten ${ph("innerhalb von X Tagen")} gelöscht; öffentlich beigetragene Orte bleiben anonymisiert erhalten.</p>
  <h3>6. Deine Rechte</h3><p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Widerruf von Einwilligungen; Beschwerde bei einer Datenschutz-Aufsichtsbehörde, in Bayern z. B. dem ${ph("BayLDA")}.</p>
  <h3>7. Kontakt</h3><p>${ph("Datenschutz-E-Mail")}</p>
- <p class="note">In dieser Version bleiben alle Angaben nur in deinem Browser auf diesem Gerät gespeichert.</p>`}</div>`}
+ <p class="note">Profil, gemerkte Orte und Event-Teilnahmen bleiben nur auf deinem Gerät. Gemeldete Orte, Berichte, Fotos und Bestätigungen werden in der Nooks-Datenbank gespeichert und sind für andere sichtbar; dabei wird eine anonyme Kennung deines Geräts verwendet.</p>`}</div>`}
 
 // ================= Rendern =================
 const NAV=[["home","home","Start"],["map","map","Karte"],["community","comm","Community"],["events","cal","Events"],["profile","user","Profil"]];
@@ -669,7 +701,9 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(d.ev){const ev=EVENTS.find(x=>x.id===+d.ev);openSheet(eventSheet(ev));return}
  if(d.go){const id=+d.go;S.going=S.going.includes(id)?S.going.filter(x=>x!==id):S.going.concat(id);sv("nk4-going",S.going);openSheet(eventSheet(EVENTS.find(x=>x.id===id)));render();toast(S.going.includes(id)?"Ihr seid dabei!":"Abgemeldet");return}
  if(d.evcat){S.evcat=d.evcat;render();return}
- if(d.confirm){S.confirms[d.confirm]=1;sv("nk4-conf",S.confirms);toast("Danke fürs Bestätigen!");render();return}
+ if(d.confirm){const p=allPlaces().find(x=>x.id===+d.confirm);S.confirms[d.confirm]=1;sv("nk4-conf",S.confirms);
+  if(DB.on&&p&&p.db)DB.sb.from("confirmations").upsert({place_id:p.dbid,vote:"y"},{onConflict:"place_id,user_id"}).then(({error})=>{if(error)toast("Konnte nicht speichern");else dbLoad().then(render)});
+  toast("Danke fürs Bestätigen!");render();return}
  if(d.legal){S.legal=d.legal;render();scrollTo(0,0);return}
  if(d.oav){S.draft.avatar=d.oav;S.draft.photo="";render();return}
  if(d.pav){P.avatar=d.pav;P.photo="";sv("nk4-profile",P);render();return}
@@ -680,7 +714,9 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(d.pint){const k=d.pint;P.int=P.int.includes(k)?P.int.filter(x=>x!==k):P.int.concat(k);sv("nk4-profile",P);render();return}
  if(d.cat){S.cat=d.cat;render();return}
  if(d.tab){if(d.ct)S.ctab=d.ct;S.tab=d.tab;S.legal="";S.sel=0;go("main");return}
- if(d.vote){S.votes[S.id]=d.vote;sv("nk4-votes",S.votes);render();return}
+ if(d.vote){S.votes[S.id]=d.vote;sv("nk4-votes",S.votes);const p=allPlaces().find(x=>x.id===S.id);
+  if(DB.on&&p&&p.db)DB.sb.from("confirmations").upsert({place_id:p.dbid,vote:d.vote},{onConflict:"place_id,user_id"}).then(({error})=>{if(error)toast("Konnte nicht speichern");else dbLoad().then(render)});
+  render();return}
  const a=d.a;
  if(a==="start")go("ob");
  if(a==="skip"){P={owner:"Alicia",dog:"Nuki",size:"L",carry:"N",age:"A",int:["huette","hike","cafe"],avatar:"samojede",photo:""};sv("nk4-profile",P);S.tab="home";go("main")}
@@ -703,11 +739,15 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(a==="savedraft")savePost(1);
  if(a==="publishpost")savePost(0);
  if(a==="submitplace"){keepForm();const f=S.form;if(!f.n.trim()||!f.a.trim())return toast("Bitte Name und Gegend angeben");if(f.lat==null)return toast("Bitte tippe auf die Karte");
+  const reg=f.lat>48&&f.lon>11.3&&f.lon<11.85?"muc":f.lat>47.55&&f.lon<13?"de":f.lon<9.6?"ch":f.lat<46.95&&f.lon>10.5?"it":"at";
+  if(DB.on){(async()=>{try{toast("Wird gesendet …");const photo=f.img?await upImg(f.img):null;const web=/^https?:\/\//.test(f.web.trim())?f.web.trim():null;
+    const {error}=await DB.sb.from("places").insert({name:f.n.trim(),cat:f.t,area:f.a.trim(),region:reg,lat:f.lat,lon:f.lon,rules:f.r.map(r=>[r[0],r[1]]),web,photo_url:photo,author_name:P.owner+" & "+P.dog,author_avatar:P.avatar});
+    if(error)throw error;await dbLoad();closeSheet();S.tab="community";S.ctab="orte";render();toast("Danke! Der Ort wird jetzt geprüft.")}catch(e){console.warn(e);toast("Senden fehlgeschlagen – bitte nochmal versuchen")}})();return}
   const id=Date.now();const np={id,n:f.n.trim(),t:f.t,a:f.a.trim(),reg:f.lat>48&&f.lon>11.3&&f.lon<11.85?"muc":f.lat>47.55&&f.lon<13?"de":f.lon<9.6?"ch":f.lat<46.95&&f.lon>10.5?"it":"at",lat:f.lat,lon:f.lon,x:px(f.lon),y:py(f.lat),r:f.r.map(r=>[r[0],r[1]]),web:f.web.trim(),by:P.owner+" & "+P.dog,ab:P.avatar,photoBy:P.photo,ago:"gerade eben",need:5,have:0};
   if(f.img)photos[id]=f.img;S.community.push(np);sv("nk4-comm",S.community);sv("nk4-photos",photos);closeSheet();S.tab="community";render();toast("Danke! Der Ort wird jetzt geprüft.")}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet();if(e.key==="Enter"&&e.target.dataset?.open){S.id=+e.target.dataset.open;go("detail")}});
 $("veil").onclick=closeSheet;
-render();
+render();dbInit();
 }
 </script>
 </body>
