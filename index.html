@@ -359,6 +359,7 @@ const EVENTS=[
 const INK="#3b2219",CR="#f4ead6",BL="#bcd6ef",RD="#e2463b",BR="#4a2b20";
 const BREEDS={samojede:["Samojede",{f:"#fbf8f1",i:INK,fl:1,ear:"p",tail:"curl",len:1,leg:1,sn:1}],golden:["Golden Retriever",{f:CR,i:RD,ear:"f",ec:RD,tail:"feather",len:1.05,leg:1,sn:1,fe:1}],labrador:["Labrador",{f:BR,i:CR,ear:"f",tail:"straight",len:1.05,leg:1,sn:1.05}],dackel:["Dackel",{f:RD,i:INK,ear:"l",ec:RD,tail:"straight",len:1.7,leg:.45,sn:1.2,pt:CR}],frenchie:["Frz. Bulldogge",{f:CR,i:INK,ear:"b",tail:"stub",len:.72,leg:.8,sn:.4,pt:BR}],border:["Border Collie",{f:BR,i:CR,ear:"h",tail:"feather",len:1.1,leg:1,sn:1,chest:CR}],mops:["Mops",{f:"#e9d6b2",i:INK,ear:"s",ec:BR,tail:"curl",len:.8,leg:.75,sn:.35,mask:BR}],husky:["Husky",{f:BL,i:INK,ear:"p",tail:"curl",len:1.05,leg:1,sn:1.15,chest:"#fbf8f1"}],mix:["Mischling",{f:BL,i:INK,ear:"f",ec:BR,tail:"up",len:1,leg:1,sn:1,dots:1}]};
 const SIZE={S:["Klein","bis ca. 10 kg"],M:["Mittel","10 bis 25 kg"],L:["Groß","über 25 kg"]};
+const ACT={R:["Gemütlich","kurze Runden, viel Kuscheln"],M:["Aktiv","gerne lange Spaziergänge"],H:["Sehr aktiv","Wandern, Rennen, Schwimmen"]};
 const AGE={P:["Welpe","unter 1 Jahr"],A:["Erwachsen","1 bis 8 Jahre"],O:["Senior","ab ca. 8 Jahren"]};
 
 // ================= Speicher & Helfer =================
@@ -369,7 +370,7 @@ const $=id=>document.getElementById(id);
 const toast=t=>{const e=$("toast");e.textContent=t;e.classList.add("show");clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove("show"),1800)};
 let P=ld("nk4-profile",null);
 const photos=ld("nk4-photos",{});
-let S={view:P?"main":"splash",tab:"home",step:0,draft:P?{...P}:{owner:"",dog:"",size:"",carry:"",age:"",int:[],avatar:"samojede"},cat:"all",id:0,evcat:"Alle",saved:ld("nk4-saved",[]),qlike:ld("nk4-qlike",""),posts:ld("nk4-posts",[]),pid:0,pf:null,ctab:"blog",going:ld("nk4-going",[]),votes:ld("nk4-votes",{}),community:ld("nk4-comm",[]),confirms:ld("nk4-conf",{}),q:"",sel:0,
+let S={view:P?"main":"splash",tab:"home",step:0,draft:P?{...P}:{owner:"",dog:"",size:"",carry:"",age:"",act:"",int:[],avatar:"samojede"},cat:"all",id:0,evcat:"Alle",saved:ld("nk4-saved",[]),qlike:ld("nk4-qlike",""),posts:ld("nk4-posts",[]),pid:0,pf:null,ctab:"blog",going:ld("nk4-going",[]),votes:ld("nk4-votes",{}),community:ld("nk4-comm",[]),confirms:ld("nk4-conf",{}),q:"",sel:0,
  F:{cats:[],fit:false,indoor:false,stay:false,free:false,reg:[]},legal:"",form:null};
 // ================= Datenbank (Supabase) =================
 // Der Publishable Key ist für Apps gedacht; geschützt wird über Row Level Security (siehe supabase/schema.sql).
@@ -478,9 +479,10 @@ const STEPS=[
  d=>`<h2>Wie groß ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">Viele Orte erlauben nur bestimmte Größen.</p>`+Object.entries(SIZE).map(([k,v])=>`<button class="opt ${d.size===k?"on":""}" data-set="size:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join(""),
  d=>`<h2>Kannst du ${esc(d.dog||"deinen Hund")} tragen?</h2><p class="sub">Auf dem Arm oder in einer Tasche, manche Orte lassen nur so Hunde rein.</p>`+[["Y","Ja, entspannt","auf dem Arm oder in der Tasche"],["N","Nein","zu groß oder mag es nicht"]].map(([k,t,s])=>`<button class="opt ${d.carry===k?"on":""}" data-set="carry:${k}"><b>${t}</b><small>${s}</small></button>`).join(""),
  d=>`<h2>Was interessiert euch am meisten?</h2><p class="sub">Wähle so viele, wie du magst.</p><div class="tiles">`+ICAT.map(k=>`<button class="tile ${d.int.includes(k)?"on":""}" data-int="${k}" aria-pressed="${d.int.includes(k)}">${scene({t:k},"t"+k)}<span>${CATS[k]}</span></button>`).join("")+`</div>`,
- d=>`<h2>Wie alt ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">Für Welpen und Senioren gelten oft eigene Regeln.</p>`+Object.entries(AGE).map(([k,v])=>`<button class="opt ${d.age===k?"on":""}" data-set="age:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join("")];
+ d=>`<h2>Wie alt ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">Für Welpen und Senioren gelten oft eigene Regeln.</p>`+Object.entries(AGE).map(([k,v])=>`<button class="opt ${d.age===k?"on":""}" data-set="age:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join(""),
+ d=>`<h2>Wie aktiv ist ${esc(d.dog||"dein Hund")}?</h2><p class="sub">So schlagen wir passende Touren und Orte vor.</p>`+Object.entries(ACT).map(([k,v])=>`<button class="opt ${d.act===k?"on":""}" data-set="act:${k}"><b>${v[0]}</b><small>${v[1]}</small></button>`).join("")];
 const LAST=STEPS.length-1;
-const stepDone=(i,d)=>[d.owner.trim()&&d.dog.trim(),d.size,d.carry,d.int.length,d.age][i];
+const stepDone=(i,d)=>[d.owner.trim()&&d.dog.trim(),d.size,d.carry,d.int.length,d.age,d.act][i];
 const onboarding=()=>{const d=S.draft,i=S.step;return `<div class="ob screen"><div class="prog">${STEPS.map((_,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>${STEPS[i](d)}<div class="ob-nav"><button class="skip" data-a="${i?"prev":"skip"}">${i?"Zurück":"Überspringen"}</button><button class="next" data-a="next" ${stepDone(i,d)?"":"disabled"}>${i===LAST?"Fertig":"Weiter"}</button></div></div>`};
 
 // ================= Karten & Listen =================
@@ -640,6 +642,7 @@ function profile(){const sv_=allPlaces().filter(p=>S.saved.includes(p.id));
  <h3 class="sec">Größe</h3><div class="chips">${Object.entries(SIZE).map(([k,v])=>`<button class="chip ${P.size===k?"on":""}" data-p="size:${k}">${v[0]}</button>`).join("")}</div>
  <h3 class="sec">Tragbar</h3><div class="chips">${[["Y","Ja"],["N","Nein"]].map(([k,t])=>`<button class="chip ${P.carry===k?"on":""}" data-p="carry:${k}">${t}</button>`).join("")}</div>
  <h3 class="sec">Alter</h3><div class="chips">${Object.entries(AGE).map(([k,v])=>`<button class="chip ${P.age===k?"on":""}" data-p="age:${k}">${v[0]}</button>`).join("")}</div>
+ <h3 class="sec">Aktivität</h3><div class="chips">${Object.entries(ACT).map(([k,v])=>`<button class="chip ${P.act===k?"on":""}" data-p="act:${k}">${v[0]}</button>`).join("")}</div>
  <p class="note" style="margin-top:22px">${DB.on?"● Verbunden mit der Nooks-Community. Orte, Berichte und Bestätigungen sehen alle.":DB.err?"○ Offline-Modus: Daten bleiben auf diesem Gerät. ("+esc(DB.err)+")":"○ Verbinde mit der Nooks-Community …"}</p>
  <h3 class="sec">Rechtliches</h3><div class="list"><button class="li" data-legal="impressum">Impressum<span>${I("chev",18)}</span></button><button class="li" data-legal="datenschutz">Datenschutz<span>${I("chev",18)}</span></button><button class="li" data-a="reset">Onboarding neu starten<span>${I("chev",18)}</span></button></div>
  <span style="display:block;width:max-content;margin:28px auto 6px;background:#045aff;border-radius:14px;padding:8px 14px"><img src="${LOGO_W}" alt="Nooks" style="height:26px;display:block"></span><p class="note" style="text-align:center;margin:0">Prototyp</p></div>`}
