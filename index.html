@@ -12,8 +12,8 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
 <style>
@@ -41,10 +41,7 @@ button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}b{
 .splash::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,14,0) 30%,rgba(17,17,14,.85) 78%)}
 .splash>*:not(svg){position:relative;z-index:1}
 .splash .logo{width:min(62%,260px);margin:0 auto 34px;display:block}
-.hband{position:relative;height:128px;border-radius:26px;overflow:hidden;margin-bottom:18px;display:flex;align-items:center;justify-content:center}
-.hband svg.sc{position:absolute;inset:0;width:100%;height:100%}
-.hband::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(17,17,14,.05),rgba(17,17,14,.45))}
-.hband img{position:relative;z-index:1;height:54px}
+.hlogo{height:30px;width:auto;display:block;margin:2px 0 16px}
 .ncard{position:relative;background:light-dark(#fbf8f2,#1f1f19);border:1px solid var(--line);border-radius:22px;padding:18px 20px 22px;margin:18px 18px 26px 0;box-shadow:0 10px 26px rgba(40,35,20,.07)}
 .ncard .nh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
 .ncard .nh b{font-weight:600;font-size:15px;color:light-dark(#3d4030,#d9d6c6)}
@@ -156,7 +153,8 @@ nav svg{width:22px;height:22px}
 .compass{position:absolute;right:16px;top:104px;width:28px;height:28px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-size:11px;font-weight:500;z-index:4;box-shadow:0 2px 8px rgba(20,20,10,.1)}
 .mk{position:absolute;transform:translate(-50%,-50%);border:0;background:var(--card);color:var(--ink);border-radius:999px;padding:5px 11px 5px 9px;font-size:12px;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap;box-shadow:0 3px 10px rgba(20,20,10,.18);min-height:30px;z-index:2}
 .mk{position:relative;transform:translate(-50%,-50%)!important;justify-content:center;width:26px;height:26px;min-height:0;padding:0;cursor:pointer}.mk.on{transform:translate(-50%,-50%) scale(1.08)!important}
-.leaflet-container{font-family:inherit;background:var(--land)}.leaflet-tile-pane{filter:saturate(.55) sepia(.12) brightness(1.03)}.leaflet-control-attribution{font-size:10px}.leaflet-bottom.leaflet-right{margin-bottom:96px}.mk .dot{width:10px;height:10px}.mk .nm{display:none}.mk.on{width:auto;padding:5px 12px 5px 10px}.mk.on .nm{display:inline}
+.mk.ml{transform:none!important}.mk.ml.on{transform:scale(1.08)!important}
+.maplibregl-map{font-family:inherit;background:var(--land)}.maplibregl-ctrl-bottom-right{margin-bottom:96px}.maplibregl-ctrl-attrib{font-size:10px}.mk .dot{width:10px;height:10px}.mk .nm{display:none}.mk.on{width:auto;padding:5px 12px 5px 10px}.mk.on .nm{display:inline}
 .mk.l{transform:translate(-12%,-50%)}.mk.r{transform:translate(-88%,-50%)}
 .mk.on{background:var(--ink);color:var(--bg);z-index:3;transform:translate(-50%,-50%) scale(1.08)}
 .mk.l.on{transform:translate(-12%,-50%) scale(1.08)}.mk.r.on{transform:translate(-88%,-50%) scale(1.08)}
@@ -431,13 +429,13 @@ function particles(){const L0=$("paws");if(!L0)return;const n=innerWidth>700?26:
  L0.innerHTML=h}
 particles();
 
-const LOGO_W="logo-white.png";
+const LOGO_W="logo-white.png",LOGO_B="logo-blue.png";
 // ================= Haptisches Feedback =================
 // Android: Vibration-API. iPhone (iOS 18+): Safari löst beim Umschalten eines versteckten Schalters ein Haptik-Signal aus. iPads haben keinen Vibrationsmotor.
 const hapt=(()=>{let lb=null;try{const i=document.createElement("input");i.type="checkbox";i.setAttribute("switch","");i.id="hapt";i.style.display="none";lb=document.createElement("label");lb.htmlFor="hapt";lb.style.display="none";document.body.append(i,lb)}catch(e){}
  return(ms=8)=>{try{if(navigator.vibrate)navigator.vibrate(ms);else if(lb)lb.click()}catch(e){}}})();
 // ================= Spruch des Tages (eigene Sprüche) =================
-const QUOTES=["Heute wird ein guter Spaziergang mit {d}.", "Kleine Erinnerung: {d} wartet schon an der Tür.", "Heute ist ein guter Tag für einen Umweg mit {d}.", "Nimm dir Zeit – {d} hat es auch nicht eilig.", "Folgt heute der Nase, nicht der Uhr.", "Frische Luft für euch zwei. Heute ganz sicher.", "Ein müder Hund ist ein glücklicher Hund – ab nach draußen.", "Vergiss das Leckerli nicht. {d} merkt es sofort.", "Matschige Pfoten heißen: Es war ein guter Tag.", "Heute schon gemeinsam die Lieblingsrunde gedreht?", "Pause am Wegrand? {d} ist sicher dafür.", "Neuer Ort, neue Gerüche – {d} freut sich drauf.", "Regen ist nur Wetter mit mehr Gerüchen.", "Heute wird ein guter Tag. {d} weiß das schon.", "Langsam gehen heißt mehr entdecken.", "Zeit für ein kleines Abenteuer direkt vor der Haustür.", "Wasser für {d} eingepackt? Dann los.", "Die schönste Aussicht teilt man zu zweit.", "Ein Stöckchen, ein Weg, ein guter Tag.", "Heute ist ein guter Tag, um einen neuen Nook zu finden.", "Lass das Handy mal stecken – {d} zeigt dir den Weg.", "Kleine Runden, große Freude.", "Gönnt euch heute was Schönes – vielleicht eine Hütte?", "Zusammen wird jeder Weg zum Lieblingsweg.", "Erinnerung an dich selbst: Kraulen nicht vergessen.", "Sonne tanken, schnuppern, wiederholen.", "Heute zählt nur: frische Luft und ein voller Napf.", "{d} hat heute große Pläne. Mach einfach mit.", "Ein Umweg mehr schadet nie.", "Gute Tage beginnen mit einer kalten Schnauze.", "Heute ist ein guter Tag für Pfotenabdrücke."];
+const QUOTES=["Für {d} bist du die ganze Welt.", "Heute wird ein guter Spaziergang. {d} freut sich schon auf dich.", "Jeder Schritt mit {d} ist eine kleine Liebeserklärung.", "{d} merkt sich nicht, wohin ihr gegangen seid – nur, dass ihr zusammen wart.", "Du bist {d}s Lieblingsmensch. Heute und jeden Tag.", "Die schönsten Momente passieren auf vier Pfoten und zwei Beinen.", "Ein Blick von {d} sagt mehr als tausend Worte.", "Heute ist ein guter Tag, um einfach zusammen draußen zu sein.", "Zuhause ist da, wo {d} auf dich wartet.", "Geh heute langsam. {d} genießt jeden Meter mit dir.", "Danke sagen geht auch mit einer extra Runde.", "{d} braucht keinen perfekten Tag – nur dich.", "Die Welt ist laut. {d} hört trotzdem nur auf dich.", "Jede Pfotenspur erzählt von einem guten Tag zu zweit.", "Ein wedelnder Schwanz ist die ehrlichste Freude der Welt.", "Heute schon gesagt? {d} ist der beste Hund.", "Manche Liebe hat vier Pfoten und eine kalte Nase.", "Mit {d} wird aus jedem Weg ein Lieblingsweg.", "Gönnt euch heute eine Pause im Gras. Einfach so.", "{d} vergisst nie, wie schön es mit dir ist.", "Kleine Abenteuer, große Liebe.", "Für {d} ist jeder Spaziergang mit dir der beste.", "Wer einen Hund hat, ist nie ganz allein.", "Heute wird ein guter Spaziergang. Versprochen.", "Ein Kopf auf deinem Knie heilt mehr, als man denkt.", "{d} wartet nicht auf das perfekte Wetter. Nur auf dich.", "Schau heute mal in {d}s Augen. Da steht alles drin.", "Treue riecht ein bisschen nach nassem Fell.", "Die schönste Begleitung braucht keine Worte.", "Zeit mit {d} ist nie verlorene Zeit.", "Ihr zwei gegen den Rest der Welt – oder wenigstens gegen den Regen."];
 const dayKey=()=>{const d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()};
 const quoteToday=()=>{const d=new Date(),start=new Date(d.getFullYear(),0,0);return QUOTES[Math.floor((d-start)/864e5)%QUOTES.length].replace(/\{d\}/g,P?P.dog:"dein Hund")};
 // ================= Onboarding =================
@@ -466,7 +464,7 @@ function row(p){const v=verdict(p,P);return `<button class="row" data-open="${p.
 function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filter(p=>S.cat==="all"||p.t===S.cat);const rank=p=>({ok:0,mid:1,no:2})[verdict(p,P)];
  const picks=L.filter(p=>(S.cat!=="all"||mine().includes(p.t))&&verdict(p,P)!=="no"&&!p.closed).sort((a,b)=>rank(a)-rank(b)||(a.km??999)-(b.km??999)).slice(0,8);
  const near=L.slice().sort((a,b)=>(a.km??9999)-(b.km??9999)).slice(0,8);const order=["all"].concat(mine(),ICAT.filter(k=>!mine().includes(k)));const posts=allPosts().slice(0,4);
- return `<div class="pg screen"><div class="hband">${scene({t:"peak",sc:["#9a9a86","#55584a","#2a2b22"]},"hb")}<img src="${LOGO_W}" alt="Nooks"></div><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
+ return `<div class="pg screen"><img class="hlogo" src="${LOGO_B}" alt="Nooks"><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
  ${(()=>{const on=S.qlike===dayKey();return `<div class="ncard"><div class="nh"><b>Erinnerung</b><span>heute</span></div><p>${esc(quoteToday())}</p><button class="nheart ${on?"on":""}" data-a="likeq" aria-label="Gefällt mir">${heart(true)}</button></div>`})()}
  <div class="pills">${order.map(k=>`<button class="pill ${S.cat===k?"on":""}" data-cat="${k}">${CATS[k]}</button>`).join("")}</div>
  ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
@@ -481,21 +479,25 @@ function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filte
 // ================= Karte mit Filter (Airbnb-Logik) =================
 function filtered(F=S.F){const q=S.q.toLowerCase();return allPlaces().filter(p=>(!F.cats.length||F.cats.includes(p.t))&&(!F.reg.length||F.reg.includes(p.reg))&&(!F.fit||verdict(p,P)==="ok")&&(!F.indoor||has(p,INDOOR))&&(!F.stay||has(p,STAY))&&(!F.free||p.r.some(r=>FREE.includes(r[0])||/Freilauf/.test(r[2]||"")))&&(!q||(p.n+" "+p.a+" "+CATS[p.t]).toLowerCase().includes(q)))}
 const fcount=()=>{const F=S.F;return F.cats.length+F.reg.length+[F.fit,F.indoor,F.stay,F.free].filter(Boolean).length};
-// Echte Karte (Leaflet + OpenStreetMap, kein API-Schlüssel nötig)
+// Echte Vektorkarte (MapLibre + OpenFreeMap, kein API-Schlüssel nötig)
 const REGIONS=[["Bayern & Tirol",[[46.9,10.2],[48.2,13.1]]],["Alle Alpen",[[45.8,7.5],[48.3,14.7]]],["München",[[48.06,11.45],[48.2,11.7]]],["Südtirol",[[46.3,11.0],[47.1,12.4]]],["Salzburg & Kärnten",[[46.4,12.4],[47.8,14.4]]],["Schweiz",[[45.8,7.5],[47.4,10.3]]]];
-let LM=null,LMEL=null,LMK=null;
-function drawMap(){const slot=$("mapslot");if(!slot)return;if(!window.L){slot.innerHTML='<p class="note" style="padding:20px">Karte lädt nicht – bitte Internetverbindung prüfen.</p>';return}
+let LM=null,LMEL=null;
+const MSTYLE="https://tiles.openfreemap.org/styles/positron";
+const lb=b=>[[b[0][1],b[0][0]],[b[1][1],b[1][0]]]; // [lat,lon] -> [lon,lat]
+let LMARK=[];
+function drawMap(){const slot=$("mapslot");if(!slot)return;const ML=window.maplibregl;
+ if(!ML){slot.innerHTML='<p class="note" style="padding:20px">Karte lädt nicht – bitte Internetverbindung prüfen.</p>';return}
  if(!LMEL){LMEL=document.createElement("div");LMEL.style.cssText="position:absolute;inset:0"}
- slot.appendChild(LMEL); // erst einhängen, dann Karte anlegen – sonst kennt sie ihre Größe nicht
- if(!LM){LM=L.map(LMEL,{zoomControl:false,center:[47.45,11.6],zoom:7});L.control.zoom({position:"bottomright"}).addTo(LM);
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(LM);
-  LMK=L.layerGroup().addTo(LM);LM.on("click",()=>{if(S.sel){S.sel=0;render()}});
-  requestAnimationFrame(()=>{LM.invalidateSize();LM.fitBounds(REGIONS[0][1])})}
- else requestAnimationFrame(()=>LM.invalidateSize());
- setTimeout(()=>LM.invalidateSize(),300);LMK.clearLayers();
- filtered().filter(p=>p.lat!=null).forEach(p=>{const v=verdict(p,P),on=S.sel===p.id;
-  const ic=L.divIcon({className:"",iconSize:null,html:`<span class="mk ${on?"on":""} ${p.by?"cm":""}"><i class="dot" style="background:var(--${v})"></i><span class="nm">${esc(p.n)}</span></span>`});
-  L.marker([p.lat,p.lon],{icon:ic,zIndexOffset:on?1000:0,keyboard:true,title:p.n}).on("click",e=>{L.DomEvent.stopPropagation(e);S.sel=p.id;render()}).addTo(LMK)})}
+ slot.appendChild(LMEL); // erst einhängen, dann Karte anlegen
+ if(!LM){LM=new ML.Map({container:LMEL,style:MSTYLE,bounds:lb(REGIONS[0][1]),fitBoundsOptions:{padding:20},attributionControl:{compact:true},dragRotate:false,pitchWithRotate:false});
+  LM.touchZoomRotate.disableRotation();LM.addControl(new ML.NavigationControl({showCompass:false}),"bottom-right");
+  LM.on("click",()=>{if(S.sel){S.sel=0;render()}})}
+ requestAnimationFrame(()=>LM.resize());setTimeout(()=>LM.resize(),300);
+ LMARK.forEach(m=>m.remove());LMARK=[];
+ filtered().filter(p=>p.lat!=null).forEach(p=>{const v=verdict(p,P),on=S.sel===p.id;const el=document.createElement("div");
+  el.innerHTML=`<span class="mk ml ${on?"on":""} ${p.by?"cm":""}" role="button" aria-label="${esc(p.n)}"><i class="dot" style="background:var(--${v})"></i><span class="nm">${esc(p.n)}</span></span>`;
+  el.style.zIndex=on?5:1;el.addEventListener("click",e=>{e.stopPropagation();hapt();S.sel=p.id;render()});
+  LMARK.push(new ML.Marker({element:el,anchor:"center"}).setLngLat([p.lon,p.lat]).addTo(LM))})}
 function mapView(){const L_=filtered(),sel=L_.find(p=>p.id===S.sel);
  return `<div class="mapv screen"><div class="mtop"><label class="msearch">${I("search")}<input id="mq" type="search" placeholder="Wohin geht's mit ${esc(P.dog)}?" value="${esc(S.q)}"></label><button class="fbtn" data-a="filter" aria-label="Filter">${I("filter",22)}${fcount()?`<i>${fcount()}</i>`:""}</button></div>
  <div class="pills" style="margin-top:12px">${["all"].concat(ICAT).map(k=>`<button class="pill ${(k==="all"&&!S.F.cats.length)||(S.F.cats.length===1&&S.F.cats[0]===k)?"on":""}" data-mcat="${k}">${CATS[k]}</button>`).join("")}</div>
@@ -617,7 +619,7 @@ function legal(){const imp=S.legal==="impressum";return `<div class="pg screen l
  :`<h3>1. Verantwortlicher</h3><p>${ph("Name, Anschrift, E-Mail")}</p>
  <h3>2. Welche Daten wir verarbeiten</h3><p>Profilangaben (dein Name, Name, Größe, Alter und Tragbarkeit deines Hundes, Interessen), Profilbild, gemerkte Orte, Event-Teilnahmen, von dir gemeldete Orte, Fotos und Bestätigungen sowie – nur mit deiner Zustimmung – deinen Standort.</p>
  <h3>3. Zweck und Rechtsgrundlage</h3><p>Personalisierte Anzeige, ob Orte für deinen Hund erlaubt sind; Bereitstellung der Community-Funktionen. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Nutzungsvertrag) und lit. a (Einwilligung, z. B. Standort).</p>
- <h3>4. Dienstleister</h3><p>${ph("Hosting / Datenbank, z. B. Supabase")}, Kartendienst OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an die OpenStreetMap Foundation übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
+ <h3>4. Dienstleister</h3><p>${ph("Hosting / Datenbank, z. B. Supabase")}, Kartendienst OpenFreeMap mit Daten von OpenStreetMap (beim Laden der Karte wird deine IP-Adresse an OpenFreeMap übermittelt), ${ph("App-Stores")}. Auftragsverarbeitungsverträge nach Art. 28 DSGVO.</p>
  <h3>5. Speicherdauer</h3><p>Solange dein Konto besteht. Nach Löschung des Kontos werden deine Daten ${ph("innerhalb von X Tagen")} gelöscht; öffentlich beigetragene Orte bleiben anonymisiert erhalten.</p>
  <h3>6. Deine Rechte</h3><p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch und Widerruf von Einwilligungen; Beschwerde bei einer Datenschutz-Aufsichtsbehörde, in Bayern z. B. dem ${ph("BayLDA")}.</p>
  <h3>7. Kontakt</h3><p>${ph("Datenschutz-E-Mail")}</p>
@@ -632,9 +634,9 @@ function bindInputs(){const fo=$("fo"),fd=$("fd");if(fo){const u=()=>{S.draft.ow
 const go=v=>{S.view=v;render();scrollTo(0,0)};
 function openSheet(h){$("sheet").innerHTML=h;document.body.classList.add("sheet-open");bindSheet()}
 function closeSheet(){document.body.classList.remove("sheet-open")}
-function bindSheet(){const mm=$("mm");if(mm&&window.L){const f=S.form;const m=L.map(mm,{zoomControl:true});L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(m);
- if(f.view)m.setView(f.view[0],f.view[1]);else m.fitBounds(REGIONS[0][1]);let pin=f.lat!=null?L.marker([f.lat,f.lon]).addTo(m):null;setTimeout(()=>m.invalidateSize(),350);
- m.on("click",e=>{f.lat=+e.latlng.lat.toFixed(5);f.lon=+e.latlng.lng.toFixed(5);if(pin)pin.setLatLng(e.latlng);else pin=L.marker(e.latlng).addTo(m)});m.on("moveend",()=>{f.view=[m.getCenter(),m.getZoom()]})}
+function bindSheet(){const mm=$("mm");if(mm&&window.maplibregl){const f=S.form,ML=window.maplibregl;const m=new ML.Map({container:mm,style:MSTYLE,attributionControl:{compact:true},dragRotate:false,...(f.view?{center:f.view[0],zoom:f.view[1]}:{bounds:lb(REGIONS[0][1])})});m.touchZoomRotate.disableRotation();
+ let pin=f.lat!=null?new ML.Marker({color:"#121210"}).setLngLat([f.lon,f.lat]).addTo(m):null;setTimeout(()=>m.resize(),350);
+ m.on("click",e=>{f.lat=+e.lngLat.lat.toFixed(5);f.lon=+e.lngLat.lng.toFixed(5);hapt();if(pin)pin.setLngLat(e.lngLat);else pin=new ML.Marker({color:"#121210"}).setLngLat(e.lngLat).addTo(m)});m.on("moveend",()=>{f.view=[m.getCenter(),m.getZoom()]})}
  document.querySelectorAll("[data-ri]").forEach(s=>s.onchange=()=>{const[i,j]=s.dataset.ri.split(":");S.form.r[i][j]=s.value})}
 function keepForm(){const f=S.form;if(!f||!$("pn"))return;f.n=$("pn").value;f.t=$("pt").value;f.a=$("pa").value;f.web=$("pw").value}
 
@@ -656,7 +658,7 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(d.ct&&!d.tab){S.ctab=d.ct;render();return}
  if(d.paws){keepPost();S.pf.paws=+d.paws;openSheet(postSheet());return}
  if(d.delimg){keepPost();S.pf.img.splice(+d.delimg,1);openSheet(postSheet());return}
- if(d.zoom){if(LM)LM.flyToBounds(REGIONS[+d.zoom][1],{duration:.8});return}
+ if(d.zoom){if(LM)LM.fitBounds(lb(REGIONS[+d.zoom][1]),{padding:20,duration:800});return}
  if(d.sel){S.sel=S.sel===+d.sel?0:+d.sel;render();return}
  if(d.mcat){S.F.cats=d.mcat==="all"?[]:[d.mcat];S.sel=0;render();return}
  if(d.tg){S.T[d.tg]=!S.T[d.tg];openSheet(filterSheet());return}
