@@ -1,0 +1,47 @@
+{
+  "expo": {
+    "name": "Nooks",
+    "slug": "nooks",
+    "scheme": "nooks",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "de.nooks.app",
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Nooks braucht Zugriff auf deine Fotos, damit du Bilder zu Orten, Berichten und deinem Profil hinzufügen kannst."
+      }
+    },
+    "android": {
+      "package": "de.nooks.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#2448ee"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "imageWidth": 220,
+          "resizeMode": "contain",
+          "backgroundColor": "#2448ee"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Nooks braucht Zugriff auf deine Fotos, damit du Bilder zu Orten, Berichten und deinem Profil hinzufügen kannst."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
