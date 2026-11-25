@@ -486,18 +486,20 @@ const stepDone=(i,d)=>[d.owner.trim()&&d.dog.trim(),d.size,d.carry,d.int.length,
 const onboarding=()=>{const d=S.draft,i=S.step;return `<div class="ob screen"><div class="prog">${STEPS.map((_,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>${STEPS[i](d)}<div class="ob-nav"><button class="skip" data-a="${i?"prev":"skip"}">${i?"Zurück":"Überspringen"}</button><button class="next" data-a="next" ${stepDone(i,d)?"":"disabled"}>${i===LAST?"Fertig":"Weiter"}</button></div></div>`};
 
 // ================= Karten & Listen =================
+const ACTFIT={R:{cafe:0,food:0,walk:0,see:1,hotel:1,huette:2,hike:3},M:{walk:0,see:0,hike:1,huette:1,cafe:1,food:2,hotel:2},H:{hike:0,huette:0,see:1,walk:2,hotel:2,cafe:3,food:3}};
+const actFit=p=>ACTFIT[P.act]?.[p.t]??1;
 const mine=()=>P.int&&P.int.length?P.int:ICAT;
 const meta=p=>`${CATS[p.t]} · ${esc(p.a)}${p.km!=null?` · ${p.km} km`:""}`;
 function big(p){const v=verdict(p,P),on=S.saved.includes(p.id);return `<div class="big" data-open="${p.id}" role="button" tabindex="0" aria-label="${esc(p.n)}">${visual(p,"b"+p.id)}<button class="rh ${on?"on":""}" data-save="${p.id}" aria-label="Merken">${heart(on)}</button><div class="glass"><small>${esc(p.a.split(",")[0].split(" · ")[0])}</small><b>${esc(p.n)}</b><span class="st ${v}"><i></i>${VTXT[v]} für ${esc(P.dog)}</span></div></div>`}
 function row(p){const v=verdict(p,P);return `<button class="row" data-open="${p.id}"><span class="th">${visual(p,"r"+p.id)}</span><span><b>${esc(p.n)}${p.closed?'<span class="badge">vorüb. geschlossen</span>':""}${isPending(p)?'<span class="badge">wird geprüft</span>':p.by?'<span class="badge">Community</span>':""}</b><small>${meta(p)}</small></span><span class="dot" style="background:var(--${v})" aria-label="${VTXT[v]}"></span></button>`}
 
 function home(){const all=allPlaces().filter(p=>!isPending(p));const L=all.filter(p=>S.cat==="all"||p.t===S.cat);const rank=p=>({ok:0,mid:1,no:2})[verdict(p,P)];
- const picks=L.filter(p=>(S.cat!=="all"||mine().includes(p.t))&&verdict(p,P)!=="no"&&!p.closed).sort((a,b)=>rank(a)-rank(b)||(a.km??999)-(b.km??999)).slice(0,8);
+ const picks=L.filter(p=>(S.cat!=="all"||mine().includes(p.t))&&verdict(p,P)!=="no"&&!p.closed).sort((a,b)=>rank(a)-rank(b)||actFit(a)-actFit(b)||(a.km??999)-(b.km??999)).slice(0,8);
  const near=L.slice().sort((a,b)=>(a.km??9999)-(b.km??9999)).slice(0,8);const order=["all"].concat(mine(),ICAT.filter(k=>!mine().includes(k)));const posts=allPosts().slice(0,4);
  return `<div class="pg screen"><img class="hlogo lg-b" src="${LOGO_B}" alt="Nooks"><img class="hlogo lg-w" src="${LOGO_W}" alt="Nooks"><div class="hi"><button class="av" data-tab="profile" aria-label="Profil">${avatarOf(P)}</button><div><h1>Hallo ${esc(P.owner)}</h1><div class="it">&amp; hallo ${esc(P.dog)}</div></div></div>
  ${(()=>{const on=S.qlike===dayKey();return `<div class="ncard"><div class="nh"><b>Erinnerung</b><span>heute</span></div><p>${esc(quoteToday())}</p><button class="nheart ${on?"on":""}" data-a="likeq" aria-label="Gefällt mir">${heart(true)}</button></div>`})()}
  <div class="pills">${order.map(k=>`<button class="pill ${S.cat===k?"on":""}" data-cat="${k}">${CATS[k]}</button>`).join("")}</div>
- ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
+ ${picks.length?`<h3 class="sec">Ausgewählt für ${esc(P.dog)}<span>${ACT[P.act]?ACT[P.act][0]+" · ":""}${L.length} Orte</span></h3><div class="stack">${picks.map(big).join("")}</div>`:""}
  <h3 class="sec">Berichte<button data-tab="community" data-ct="blog">Alle Berichte</button></h3><div class="stack">${posts.map(postCard).join("")}</div>
  <h3 class="sec">Nächstes Event<button data-tab="events">Alle Events</button></h3>${evRow(EVENTS[0])}
  <h3 class="sec">Orte entdecken<button data-tab="map">Auf der Karte</button></h3>
