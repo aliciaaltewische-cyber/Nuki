@@ -212,6 +212,8 @@ nav svg{width:22px;height:22px}
 .box p{margin:0 0 12px}
 .it{font-style:italic}
 .btns{display:flex;gap:8px;flex-wrap:wrap}
+.visit .ob2{display:inline-flex;align-items:center;gap:6px}.faces{display:flex;margin:4px 0 8px}.faces .fc{width:38px;height:38px;margin-left:-9px;border:2px solid var(--bg);font-size:14px}.faces .fc:first-child{margin-left:0}.faces .more{font-size:12px;color:var(--mut)}.vt{margin:0 0 12px}
+.wall{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}.wall figure{margin:0;position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--soft)}.wall img{width:100%;height:100%;object-fit:cover;display:block}.wall figcaption{position:absolute;left:8px;bottom:6px;color:#fff;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,.5)}
 .ob2{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:9px 18px;min-height:44px;font-size:14px}
 .cta{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:999px;padding:8px 8px 8px 24px;margin-top:18px;border:1px solid var(--line)}
 .cta div{flex:1}.cta b{display:block;font-style:italic;font-size:18px}.cta small{color:var(--mut);font-size:12px}
@@ -378,7 +380,7 @@ let S={view:P?"main":"splash",tab:"home",step:0,draft:P?{...P}:{owner:"",dog:"",
 // ================= Datenbank (Supabase) =================
 // Der Publishable Key ist für Apps gedacht; geschützt wird über Row Level Security (siehe supabase/schema.sql).
 const SB_URL="https://iehiaytlzaorkopmzvly.supabase.co",SB_KEY="sb_publishable_k1HGf_gQM1JWg3JydaImaA_PJ68qWE7";
-const DB={on:false,sb:null,uid:null,err:"",places:[],posts:[],votes:{}};
+const DB={on:false,sb:null,uid:null,err:"",places:[],posts:[],votes:{},visits:{}};
 const SCS2=[["#8c8f6e","#5d6247","#3d4030"],["#a8a07c","#6e6a4c","#2f3024"],["#9aa392","#5f6a5a","#323a31"],["#b5ab8a","#7d7656","#45422f"],["#a3a89c","#6b7066","#33372f"]];
 const ago=t=>{const d=Math.max(0,Math.round((Date.now()-new Date(t))/864e5));return d===0?"heute":d===1?"gestern":"vor "+d+" Tagen"};
 const fmtDate=t=>new Date(t).toLocaleDateString("de-DE",{day:"numeric",month:"short",year:"numeric"});
@@ -389,9 +391,27 @@ function rowToPlace(r,st){return {id:100000+r.id,dbid:r.id,db:1,n:r.name,t:r.cat
 function rowToPost(r){return {id:200000+r.id,dbid:r.id,place:r.place_id?100000+r.place_id:null,title:r.title,text:r.body,img:r.images||[],paws:r.paws,draft:r.draft?1:0,by:r.author_name||"Jemand",av:r.author_avatar,date:fmtDate(r.created_at),mine:r.created_by===DB.uid}}
 async function dbLoad(){const sb=DB.sb;
  const [pl,st,po,my]=await Promise.all([sb.from("places").select("*"),sb.from("place_stats").select("*"),sb.from("posts").select("*").order("created_at",{ascending:false}),sb.from("confirmations").select("place_id,vote").eq("user_id",DB.uid)]);
+ await dbVisits();
  if(pl.error)throw pl.error;const stats=Object.fromEntries((st.data||[]).map(r=>[r.place_id,r]));
  DB.places=pl.data.map(r=>rowToPlace(r,stats[r.id]));DB.posts=(po.data||[]).map(rowToPost);DB.votes=Object.fromEntries((my.data||[]).map(r=>[100000+r.place_id,r.vote]));
  const k=DB.places.find(p=>p.n==="Kenzenhütte");if(k)BLOG[0].place=k.id}
+async function dbVisits(){const {data,error}=await DB.sb.from("visits").select("place_id,user_id,dog,avatar,photo,created_at").order("created_at",{ascending:false}).limit(3000);if(error){console.warn("visits",error);return}
+ const m={};for(const v of data){(m[100000+v.place_id]=m[100000+v.place_id]||[]).push({dog:v.dog,avatar:v.avatar,photo:v.photo,who:v.user_id,mine:v.user_id===DB.uid,at:v.created_at})}DB.visits=m}
+let LVIS=ld("nk4-visits",{});
+const visitsOf=p=>(DB.on&&p.db?DB.visits[p.id]:LVIS[p.id])||[];
+const visAv=v=>/^https?:/.test(v.avatar||"")?{photo:v.avatar,dog:v.dog}:{avatar:BREEDS[v.avatar]?v.avatar:"",dog:v.dog};
+function faces(p){const seen=new Set(),u=[];for(const v of visitsOf(p)){const k=(v.who||"me")+"|"+v.dog.toLowerCase();if(!seen.has(k)){seen.add(k);u.push(v)}}return u}
+async function dogAv(x){if(x.photo&&DB.on){if(!x.photoUrl)x.photoUrl=await upImg(x.photo);return x.photoUrl}return x.avatar||""}
+async function addVisit(p,img){const dogs=[P].concat(pack());
+ try{if(DB.on&&p.db){const ph=img?await upImg(img):null;const rows=[];for(const [i,x] of dogs.entries())rows.push({place_id:p.dbid,dog:x.dog,avatar:await dogAv(x),photo:i===0?ph:null});saveP();
+   const {error}=await DB.sb.from("visits").insert(rows);if(error)throw error;await dbVisits()}
+  else{const at=new Date().toISOString();LVIS[p.id]=dogs.map((x,i)=>({dog:x.dog,avatar:x.photo||x.avatar||"",photo:i===0?img:null,mine:true,at})).concat(LVIS[p.id]||[]);if(!sv("nk4-visits",LVIS))toast("Foto nur für diese Sitzung")}
+  toast(img?"Danke fürs Teilen!":"Schön, dass ihr hier wart!");render()}catch(e){console.warn(e);toast("Speichern fehlgeschlagen, bitte nochmal")}}
+function visitBox(p){const f=faces(p),me=f.filter(v=>v.mine).map(v=>v.dog),others=f.length-me.length;const wall=visitsOf(p).filter(v=>v.photo).slice(0,12);
+ const txt=!f.length?"Noch kein Hund hat sich hier eingetragen. Seid die Ersten!":me.length?`${esc(namesTxt(me))}${others?` und ${others} ${others===1?"anderer Hund":"andere Hunde"}`:""} ${me.length+others>1?"waren":"war"} schon hier`:`${f.length} ${f.length===1?"Hund war":"Hunde waren"} schon hier`;
+ return `<h3 class="sec">Wer schon hier war</h3><div class="visit">${f.length?`<div class="faces">${f.slice(0,7).map(v=>`<span class="av fc" title="${esc(v.dog)}">${avatarOf(visAv(v))}</span>`).join("")}${f.length>7?`<span class="av fc more">+${f.length-7}</span>`:""}</div>`:""}<p class="vt">${txt}</p>
+ <div class="btns"><button class="ob2" data-a="visit">Wir waren hier</button><label class="ob2" style="cursor:pointer" data-upload="visit">${I("cam",15)} Foto teilen</label></div>
+ ${wall.length?`<div class="wall">${wall.map(v=>`<figure><img src="${esc(v.photo)}" alt="${esc(v.dog)} hier" loading="lazy"><figcaption>${esc(v.dog)}</figcaption></figure>`).join("")}</div>`:""}</div>`}
 async function dbInit(){if(!window.supabase){DB.err="Datenbank-Bibliothek nicht geladen";return}
  try{DB.sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true}});
   let {data:{session}}=await DB.sb.auth.getSession();
@@ -436,7 +456,7 @@ function breedSvg(k){const o=(BREEDS[k]||BREEDS.mix)[1],f=o.f,ink=o.i;
  <circle cx="${hx}" cy="${hy}" r="13" fill="${f}" stroke="${ink}" stroke-width="1.6"/>
  <g fill="${o.ec||f}" stroke="${ink}" stroke-width="1.6">${E}</g>
  <circle cx="${sx-8*o.sn+2}" cy="${hy+1.5}" r="2.6" fill="${INK}"/><path d="M${hx-5} ${hy-2} q1.5 -1.5 3 0" stroke="${o.f===BR?CR:INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M${sx+1} ${hy+7} q3 2 6 0" stroke="${ink}" stroke-width="1.2" fill="none" stroke-linecap="round"/></g></svg>`}
-const DOGF=["dog","size","carry","age","act","avatar","photo"];
+const DOGF=["dog","size","carry","age","act","avatar","photo","photoUrl"];
 const dogOf=o=>Object.fromEntries(DOGF.map(k=>[k,o[k]||""]));
 const pack=()=>P&&Array.isArray(P.pack)?P.pack:[];
 const dogNames=()=>[P.dog].concat(pack().map(x=>x.dog)).filter(Boolean);
@@ -605,9 +625,10 @@ function detail(){const p=allPlaces().find(x=>x.id===S.id);if(!p){S.view="main";
  <div class="links">${typeof p.web==="string"&&/^https?:\/\//.test(p.web)?`<a class="lk" href="${esc(p.web)}" target="_blank" rel="noopener">${I("ext",16)} Zur Website</a>`:""}<a class="lk" href="${route}" target="_blank" rel="noopener">${I("route",16)} In Google Maps öffnen</a>${p.lat==null?`<span class="note" style="align-self:center">Pin auf der Karte folgt</span>`:""}</div>
  ${pend?`<div class="box" style="margin:12px 0"><p style="margin:0"><b>Wird von der Community geprüft</b></p><p class="note" style="margin:4px 0 0">Noch nicht bestätigt, Angaben können abweichen.</p></div>`:""}
  ${p.closed?`<div class="box" style="margin:12px 0"><p style="margin:0"><b>Laut Google Maps vorübergehend geschlossen</b></p></div>`:""}
- <div class="verdict ${v}"><b>${v==="mid"?"Mit Einschränkung für":VTXT[v]+" für"} ${esc(P.dog)}</b>${v==="ok"?"Überall willkommen.":v==="mid"?"Nicht überall oder nur nach Anmeldung, schau dir die Details an.":"Hier leider nicht. Schau dir Alternativen an."}</div>
+ <div class="verdict ${v}"><b>${v==="mid"?"Mit Einschränkung für":VTXT[v]+" für"} ${esc(dogsTxt())}</b>${v==="ok"?"Überall willkommen.":v==="mid"?"Nicht überall oder nur nach Anmeldung, schau dir die Details an.":"Hier leider nicht. Schau dir Alternativen an."}</div>
  ${p.r.map(r=>{const o=ok(r[1],P),c=o===1?"ok":o?"mid":"no";return `<div class="rule"><span class="ic" style="background:var(--${c})">${o===1?"✓":o?"!":"✕"}</span><div><b>${esc(r[0])}</b><small>${RT[r[1]]}${r[2]?" · "+esc(r[2]):""}</small></div></div>`}).join("")}
  ${p.note?`<div class="box"><p style="margin:0 0 6px"><b>${p.srcName&&!p.src?"Hinweis aus der Recherche":"Hinweis aus der Liste"}</b></p><p class="it" style="margin:0">„${esc(p.note)}“</p><p class="note" style="margin:8px 0 0">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln können sich ändern, vor dem Besuch bei der Hütte bestätigen.</p></div>`:(p.src||p.srcName)?`<p class="note">Quelle: ${esc(p.srcName||"Liste „Berghütten mit Hund“ (Google Maps)")}. Regeln vor dem Besuch bei der Hütte bestätigen.</p>`:""}
+ ${visitBox(p)}
  <h3 class="sec">Berichte<button data-a="newpost">+ Bericht schreiben</button></h3>${allPosts().filter(b=>b.place===p.id).map(postRow).join("")||`<p class="note">Noch kein Bericht zu diesem Ort.</p>`}
  ${p.chk||p.src?`<div class="box"><p><b>Stimmt das noch?</b><br><span class="note">${p.chk?`Zuletzt bestätigt vor ${p.chk[0]} Tagen von ${p.chk[1]+(vote==="y"?1:0)} Hundebesitzern`:`Warst du mit Hund dort? Hilf anderen mit einer Bestätigung.`}</span></p>${vote?`<p class="it" style="margin:0">Danke, ${esc(P.owner)}! ${vote==="y"?"Bestätigt.":"Wir prüfen das."}</p>`:`<div class="btns"><button class="ob2" data-vote="y">Ja, stimmt</button><button class="ob2" data-vote="n">Nein, hat sich geändert</button></div>`}</div>`:""}
  <div class="cta"><div><b>${on?"Gemerkt":"Merken"}</b><small>für euren nächsten Ausflug</small></div><button data-save="${p.id}">${on?"♥ Gespeichert":"♡ Speichern"}</button></div></div></div>`}
@@ -698,8 +719,9 @@ let upTarget="";
 function readImg(file){return new Promise(res=>{const u=URL.createObjectURL(file);const im=new Image();im.onload=()=>{const m=900,sc=Math.min(1,m/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=im.width*sc;c.height=im.height*sc;c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.78))};im.onerror=()=>res(null);im.src=u})}
 $("file").onchange=async e=>{const f=e.target.files[0];e.target.value="";if(!f)return;const d=await readImg(f);if(!d)return toast("Bild konnte nicht gelesen werden");
  if(upTarget==="oav"){S.draft.photo=d;render()}
- else if(upTarget==="pav"){P.photo=d;if(!sv("nk4-profile",P))toast("Foto nur für diese Sitzung");render()}
+ else if(upTarget==="pav"){P.photo=d;P.photoUrl="";if(!sv("nk4-profile",P))toast("Foto nur für diese Sitzung");render()}
  else if(upTarget==="detail"){photos[S.id]=d;toast(sv("nk4-photos",photos)?"Foto gespeichert":"Foto nur für diese Sitzung");render()}
+ else if(upTarget==="visit"){const p=allPlaces().find(x=>x.id===S.id);if(p)addVisit(p,d)}
  else if(upTarget==="place"){keepForm();S.form.img=d;openSheet(addSheet())}
  else if(upTarget==="post"){keepPost();S.pf.img.push(d);openSheet(postSheet())}};
 
@@ -739,6 +761,7 @@ document.addEventListener("click",e=>{if(e.target.closest("button,[role=button],
  if(a==="start")go("ob");
  if(a==="skip"){P={owner:"Alicia",dog:"Nuki",size:"L",carry:"N",age:"A",int:["huette","hike","cafe"],avatar:"samojede",photo:""};sv("nk4-profile",P);S.tab="home";go("main")}
  if(a==="prev"){S.step--;if(S.adding&&S.step===3)S.step--;render()}
+ if(a==="visit"){const p=allPlaces().find(x=>x.id===S.id);if(p)addVisit(p,null);return}
  if(a==="obmore"){S.obPack=(S.obPack||[]).concat([dogOf({...S.draft,dog:S.draft.dog.trim()})]);S.draft={...S.draft,dog:"",size:"",carry:"",age:"",act:"",avatar:"",photo:""};S.adding=true;S.step=0;render();return}
  if(a==="canceldog"){finishOb(false);return}
  if(a==="next"){if(S.step<LAST){S.step++;if(S.adding&&S.step===3)S.step++;render()}else finishOb(true)}
